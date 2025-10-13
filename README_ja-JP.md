@@ -251,6 +251,6 @@ IssueとPRを歓迎します:
 このプロジェクトが役に立った場合は、WeChatでの寄付を歓迎します:
 
 <p align="center">
-  <img src="https://hyperbot.oss-accelerate.aliyuncs.com/TEMP/0942b17f-9eec-4291-adcb-612507b9dce6.jpg" alt="WeChat Donation Code" width="280" />
+  <img src="https://github.com/user-attachments/assets/f18e4cef-79c9-4fb4-8019-869f30a666ad" alt="WeChat Donation Code" width="280" />
 </p>
 

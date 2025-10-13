@@ -251,6 +251,7 @@ npm run dev
 如果本项目对你有帮助，欢迎赞赏支持（微信）：
 
 <p align="center">
-  <img src="https://hyperbot.oss-accelerate.aliyuncs.com/TEMP/0942b17f-9eec-4291-adcb-612507b9dce6.jpg" alt="微信赞赏码" width="280" />
+  <img src="[https://hyperbot.oss-accelerate.aliyuncs.com/TEMP/0942b17f-9eec-4291-adcb-612507b9dce6.jpg](https://github.com/user-attachments/assets/4032d867-b018-473a-8e77-31589e9b28e0)" alt="微信赞赏码" width="280" />
 </p>
+
 

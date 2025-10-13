@@ -23,6 +23,9 @@
 
 面向 AI 创作与工作流的全栈开源项目：前端基于 Vue 3 + Vite + TypeScript + Element Plus，后端采用 Spring Boot 3 多模块架构，集成登录鉴权、聊天（LLM/OpenRouter 流式）、ComfyUI 工作流编排、对象存储（阿里云 OSS）、通知邮件、系统管理等能力。
 
+### 演示用的Comfyui整合包
+通过网盘分享的文件：2_整合包ComfyUI-aki-1.6.rar等2个文件
+链接: https://pan.baidu.com/s/1hcsZiz367FtK4pJHRWVa_g?pwd=iavj 提取码: iavj 复制这段内容后打开百度网盘手机App，操作更方便哦
 ### 功能预览
 <p align="center">
 

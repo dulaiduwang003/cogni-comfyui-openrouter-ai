@@ -23,6 +23,10 @@
 
 AI作成とワークフローのためのフルスタックオープンソースプロジェクト：フロントエンドはVue 3 + Vite + TypeScript + Element Plusで構築され、バックエンドはSpring Boot 3のマルチモジュールアーキテクチャを採用しています。認証、チャット（LLM/OpenRouterストリーミング）、ComfyUIワークフローオーケストレーション、オブジェクトストレージ（Aliyun OSS）、メール通知、システム管理などの機能を統合しています。
 
+### デモ用ComfyUIスタートキット​
+クラウドストレージで共有されたファイル：「2_整合包ComfyUI-aki-1.6.rar」など2つのファイル
+リンク：https://pan.baidu.com/s/1hcsZiz367FtK4pJHRWVa_g?pwd=iavj  抽出コード：iavj
+
 ### 機能プレビュー
 <p align="center">
 

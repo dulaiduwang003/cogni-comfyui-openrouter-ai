@@ -250,9 +250,9 @@ npm run dev
 ### 支持作者
 如果本项目对你有帮助，欢迎赞赏支持（微信）：
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/87a0ab43-950c-4f93-ae2a-bd92325be41c" alt="微信赞赏码" width="280" />
-</p>
+<img src="https://github.com/user-attachments/assets/f18e4cef-79c9-4fb4-8019-869f30a666ad" alt="微信赞赏码" width="280" />
+
+
 
 
 

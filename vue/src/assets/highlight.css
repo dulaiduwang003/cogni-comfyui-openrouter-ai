@@ -1,0 +1,226 @@
+/* Highlight.js 代码高亮样式 - 支持明暗主题 */
+
+/* 基础代码块样式 */
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0;
+  background: transparent;
+  color: var(--el-text-color-primary);
+  line-height: 1.5;
+}
+
+/* 亮色主题代码高亮 */
+:root {
+  --hljs-comment: #6a737d;
+  --hljs-keyword: #d73a49;
+  --hljs-string: #032f62;
+  --hljs-number: #005cc5;
+  --hljs-function: #6f42c1;
+  --hljs-variable: #e36209;
+  --hljs-tag: #22863a;
+  --hljs-attribute: #6f42c1;
+  --hljs-built-in: #005cc5;
+  --hljs-type: #d73a49;
+  --hljs-literal: #005cc5;
+  --hljs-meta: #6f42c1;
+  --hljs-title: #6f42c1;
+  --hljs-emphasis: italic;
+  --hljs-strong: bold;
+}
+
+/* 暗色主题代码高亮 */
+html[class^="theme-dark"],
+html[class*=" theme-dark"] {
+  --hljs-comment: #9aa3ad;
+  --hljs-keyword: #ff8b82;
+  --hljs-string: #c2e7ff;
+  --hljs-number: #8bccff;
+  --hljs-function: #e2b8ff;
+  --hljs-variable: #ffb26a;
+  --hljs-tag: #8ef79a;
+  --hljs-attribute: #e2b8ff;
+  --hljs-built-in: #8bccff;
+  --hljs-type: #ff8b82;
+  --hljs-literal: #8bccff;
+  --hljs-meta: #e2b8ff;
+  --hljs-title: #e2b8ff;
+}
+
+/* 语法高亮样式 */
+.hljs-comment,
+.hljs-quote {
+  color: var(--hljs-comment);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst {
+  color: var(--hljs-keyword);
+  font-weight: bold;
+}
+
+.hljs-string,
+.hljs-doctag {
+  color: var(--hljs-string);
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: var(--hljs-number);
+}
+
+.hljs-function,
+.hljs-title,
+.hljs-section {
+  color: var(--hljs-function);
+  font-weight: bold;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: var(--hljs-built-in);
+}
+
+.hljs-type {
+  color: var(--hljs-type);
+}
+
+.hljs-attribute,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta {
+  color: var(--hljs-attribute);
+}
+
+.hljs-tag {
+  color: var(--hljs-tag);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+/* 特定语言样式优化 */
+
+/* JavaScript/TypeScript */
+.hljs-class .hljs-title {
+  color: var(--hljs-function);
+}
+
+.hljs-params {
+  color: var(--hljs-variable);
+}
+
+/* Python */
+.hljs-decorator {
+  color: var(--hljs-meta);
+}
+
+/* CSS */
+.hljs-selector-class,
+.hljs-selector-id {
+  color: var(--hljs-function);
+}
+
+.hljs-property {
+  color: var(--hljs-attribute);
+}
+
+/* HTML */
+.hljs-tag .hljs-name {
+  color: var(--hljs-tag);
+}
+
+.hljs-tag .hljs-attr {
+  color: var(--hljs-attribute);
+}
+
+/* JSON */
+.hljs-attr {
+  color: var(--hljs-attribute);
+}
+
+/* Shell/Bash */
+.hljs-built_in {
+  color: var(--hljs-built-in);
+}
+
+/* SQL */
+.hljs-keyword {
+  color: var(--hljs-keyword);
+  text-transform: uppercase;
+}
+
+/* 代码复制按钮样式 */
+.code-block-wrapper {
+  position: relative;
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--el-fill-color);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--el-text-color-regular);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.code-block-wrapper:hover .code-copy-btn {
+  opacity: 1;
+}
+
+.code-copy-btn:hover {
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-primary);
+}
+
+/* 行号样式 */
+.hljs-ln {
+  border-collapse: collapse;
+}
+
+.hljs-ln td {
+  padding: 0;
+}
+
+.hljs-ln-numbers {
+  text-align: right;
+  color: var(--hljs-comment);
+  border-right: 1px solid var(--el-border-color-lighter);
+  vertical-align: top;
+  padding-right: 8px;
+  margin-right: 8px;
+  user-select: none;
+}
+
+.hljs-ln-code {
+  padding-left: 8px;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .hljs {
+    font-size: 14px;
+  }
+  
+  .code-copy-btn {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+} 

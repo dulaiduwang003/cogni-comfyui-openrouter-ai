@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cogni X</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+
+      #initial-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        background: var(--el-bg-color-page, #f9f9fb);
+        background-image: linear-gradient(
+          135deg, 
+          var(--el-bg-color-page, #f9f9fb) 0%, 
+          var(--el-bg-color-overlay, #fefefe) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease-out, background 0.3s ease;
+      }
+      
+      #initial-loading.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--el-color-primary-light-8, rgba(255, 52, 102, 0.3));
+        border-top: 3px solid var(--el-color-primary, #FF3466);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-text {
+        color: var(--el-text-color-regular, #5e5e5e);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 14px;
+        opacity: 0.8;
+        transition: color 0.3s ease;
+      }
+      
+      /* 深色主题适配 */
+      .theme-dark-red #initial-loading {
+        background: var(--el-bg-color-page, #000000);
+        background-image: linear-gradient(
+          135deg, 
+          var(--el-bg-color-page, #000000) 0%, 
+          var(--el-bg-color-overlay, #1c1c1c) 100%
+        );
+      }
+      
+      /* 浅色主题适配 */
+      .theme-light-soft-lavender #initial-loading,
+      .theme-light-red #initial-loading {
+        background: var(--el-bg-color-page, #f9f9fb);
+        background-image: linear-gradient(
+          135deg, 
+          var(--el-bg-color-page, #f9f9fb) 0%, 
+          var(--el-bg-color-overlay, #fefefe) 100%
+        );
+      }
+      
+      /* 避免初始闪烁 */
+      body {
+        margin: 0;
+        padding: 0;
+        /* 默认使用浅色背景，避免闪烁 */
+        background: var(--el-bg-color-page, #f9f9fb);
+        overflow: hidden;
+        transition: background-color 0.3s ease;
+      }
+      
+      /* 各主题下的body背景 */
+      .theme-dark-red body {
+        background: var(--el-bg-color-page, #000000);
+      }
+      
+      .theme-light-soft-lavender body,
+      .theme-light-red body {
+        background: var(--el-bg-color-page, #f9f9fb);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 初始加载屏幕 -->
+    <div id="initial-loading">
+      <div class="loading-spinner"></div>
+
+    </div>
+    
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

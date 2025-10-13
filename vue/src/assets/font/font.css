@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'PingFang';
+  src: url('@/assets/font/PingFang.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  /* 添加兼容性写法 */
+  src: local('PingFang SC'), 
+       local('PingFang-SC-Regular'),
+       url('@/assets/font/PingFang.ttf') format('truetype');
+} 
+

@@ -1,0 +1,295 @@
+
+.page-transition-fade-up,
+.page-transition-fade-down,
+.page-transition-fade-left,
+.page-transition-fade-right,
+.page-transition-scale,
+.page-transition-fade {
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-transition-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.page-transition-fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-fade-down {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.page-transition-fade-down.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-fade-left {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.page-transition-fade-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-transition-fade-right {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.page-transition-fade-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-transition-scale {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.page-transition-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.page-transition-fade {
+  opacity: 0;
+}
+
+.page-transition-fade.visible {
+  opacity: 1;
+}
+
+.stagger-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stagger-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-container {
+  animation: pageEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-enter {
+  animation: cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-enter:nth-child(1) { animation-delay: 0ms; }
+.card-enter:nth-child(2) { animation-delay: 80ms; }
+.card-enter:nth-child(3) { animation-delay: 160ms; }
+.card-enter:nth-child(4) { animation-delay: 240ms; }
+.card-enter:nth-child(5) { animation-delay: 320ms; }
+.card-enter:nth-child(6) { animation-delay: 400ms; }
+
+.header-enter {
+  animation: headerEnter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes headerEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-enter {
+  animation: contentEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+}
+
+@keyframes contentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sidebar-enter {
+  animation: sidebarEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards;
+}
+
+@keyframes sidebarEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fab-enter {
+  animation: fabEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
+}
+
+@keyframes fabEnter {
+  from {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.grid-item-enter {
+  animation: gridItemEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes gridItemEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.grid-item-enter:nth-child(1) { animation-delay: 0ms; }
+.grid-item-enter:nth-child(2) { animation-delay: 50ms; }
+.grid-item-enter:nth-child(3) { animation-delay: 100ms; }
+.grid-item-enter:nth-child(4) { animation-delay: 150ms; }
+.grid-item-enter:nth-child(5) { animation-delay: 200ms; }
+.grid-item-enter:nth-child(6) { animation-delay: 250ms; }
+.grid-item-enter:nth-child(7) { animation-delay: 300ms; }
+.grid-item-enter:nth-child(8) { animation-delay: 350ms; }
+.grid-item-enter:nth-child(9) { animation-delay: 400ms; }
+
+.searchbar-enter {
+  animation: searchbarEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+}
+
+@keyframes searchbarEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.empty-state-enter {
+  animation: emptyStateEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes emptyStateEnter {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-enter {
+  animation: modalEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-transition-fade-up,
+  .page-transition-fade-down {
+    transform: translateY(20px);
+  }
+  
+  .page-transition-fade-left,
+  .page-transition-fade-right {
+    transform: translateX(20px);
+  }
+  
+  @keyframes pageEnter {
+    from {
+      transform: translateY(15px);
+    }
+  }
+  
+  @keyframes cardEnter {
+    from {
+      transform: translateY(10px) scale(0.98);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition-fade-up,
+  .page-transition-fade-down,
+  .page-transition-fade-left,
+  .page-transition-fade-right,
+  .page-transition-scale,
+  .page-transition-fade,
+  .stagger-item,
+  .page-container,
+  .card-enter,
+  .header-enter,
+  .content-enter,
+  .sidebar-enter,
+  .fab-enter,
+  .grid-item-enter,
+  .searchbar-enter,
+  .empty-state-enter,
+  .modal-enter {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+

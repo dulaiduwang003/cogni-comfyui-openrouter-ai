@@ -1,0 +1,157 @@
+/* 全局重置和基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'PingFang', 'PingFang SC', 'Arial', sans-serif;
+  /* 移除强制的黑色背景，让CSS变量控制 */
+  background-color: var(--el-bg-color-page, #f9f9fb);
+  color: var(--el-text-color-primary, #3b3b3b);
+  line-height: 1.6;
+  overflow-y: auto;
+  min-height: 100vh;
+  /* 添加平滑过渡 */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  outline: none;
+}
+
+/* 星空效果的全局背景 */
+.star-bg {
+  background-color: var(--el-bg-color-page, #000);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* 过渡动画 */
+/* 1. 默认淡入淡出 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 2. 从下方滑入 */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+/* 3. 缩放效果 */
+.zoom-enter-active,
+.zoom-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.zoom-enter-from,
+.zoom-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* 4. 旋转淡入 */
+.rotate-enter-active,
+.rotate-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.rotate-enter-from {
+  opacity: 0;
+  transform: scale(0.9) rotate(-3deg);
+}
+
+.rotate-leave-to {
+  opacity: 0;
+  transform: scale(0.9) rotate(3deg);
+}
+
+/* 工具类 */
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+/* 全局滚动条样式 - 简洁无背景色无箭头 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Webkit 滚动条样式 */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+  border: none !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-radius: 3px !important;
+  border: none !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 去除滚动条箭头 */
+*::-webkit-scrollbar-button {
+  display: none !important;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+/* 暗色主题滚动条 */
+html[class^="theme-dark"] *,
+html[class*=" theme-dark"] * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+html[class^="theme-dark"] *::-webkit-scrollbar-thumb,
+html[class*=" theme-dark"] *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+html[class^="theme-dark"] *::-webkit-scrollbar-thumb:hover,
+html[class*=" theme-dark"] *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4) !important;
+}

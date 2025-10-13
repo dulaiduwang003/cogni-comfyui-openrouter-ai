@@ -1,56 +1,41 @@
 {
-  "name": "TS-GPT",
-  "version": "0.1.0",
+  "name": "Cogin X",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.1.0",
-    "@kangc/v-md-editor": "^2.3.17",
-    "axios": "^1.4.0",
-    "core-js": "^3.8.3",
-    "element-plus": "^2.2.33",
-    "instal": "^0.0.1-security",
-    "prismjs": "^1.29.0",
-    "sass": "^1.69.5",
-    "save-dev": "^0.0.1-security",
-    "vue": "^3.2.13",
-    "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "@element-plus/icons-vue": "^2.3.1",
+    "@google/model-viewer": "^4.1.0",
+    "@yeger/vue-masonry-wall": "^5.1.1",
+    "axios": "^1.9.0",
+    "element-plus": "^2.9.11",
+    "highlight.js": "^11.11.1",
+    "lottie-web": "^5.13.0",
+    "markdown-it": "^14.1.0",
+    "mitt": "^3.0.1",
+    "pinia": "^3.0.3",
+    "vue": "^3.5.13",
+    "vue-i18n": "^9.14.5",
+    "vue-router": "^4.5.0",
+    "vue-waterfall-plugin-next": "^2.6.5",
+    "vue-waterfall2": "^1.10.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "sass-loader": "^13.3.2"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^22.15.26",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "rollup-plugin-visualizer": "^6.0.4",
+    "sass": "^1.89.0",
+    "terser": "^5.44.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0",
+    "vite-plugin-compression": "^0.5.1",
+    "vue-tsc": "^2.2.4"
+  }
 }

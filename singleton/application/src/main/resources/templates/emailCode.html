@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cogni X Email Verification Code</title>
+    <style>
+        table {
+          width: 700px;
+          margin: 0 auto;
+        }
+
+        #top {
+          width: 700px;
+          border-bottom: 1px solid #ccc;
+          margin: 0 auto 30px;
+        }
+
+        #top table {
+          font: 12px Tahoma, Arial, Songti;
+          height: 40px;
+        }
+
+        #content {
+          width: 680px;
+          padding: 0 10px;
+          margin: 0 auto;
+        }
+
+        #content_top {
+          line-height: 1.5;
+          font-size: 14px;
+          margin-bottom: 25px;
+          color: #4d4d4d;
+        }
+
+        #content_top strong {
+          display: block;
+          margin-bottom: 15px;
+        }
+
+        #content_top strong span {
+          color: #f60;
+          font-size: 16px;
+        }
+
+        #verificationCode {
+          color: #0c0c0c;
+          font-size: 24px;
+        }
+
+        #content_bottom {
+          margin-bottom: 30px;
+        }
+
+        #content_bottom small {
+          display: block;
+          margin-bottom: 20px;
+          font-size: 12px;
+          color: #747474;
+        }
+
+        #bottom {
+          width: 700px;
+          margin: 0 auto;
+        }
+
+        #bottom div {
+          padding: 10px 10px 0;
+          border-top: 1px solid #ccc;
+          color: #747474;
+          margin-bottom: 20px;
+          line-height: 1.3em;
+          font-size: 12px;
+        }
+
+        #content_top strong span {
+          font-size: 18px;
+          color: #FE4F70;
+        }
+
+        #sign {
+          text-align: right;
+          font-size: 18px;
+          color: #FE4F70;
+          font-weight: bold;
+        }
+
+        #verificationCode {
+          height: 100px;
+          width: 680px;
+          text-align: center;
+          margin: 30px 0;
+        }
+
+        #verificationCode div {
+          height: 100px;
+          width: 680px;
+
+        }
+
+
+        .button:hover {
+          box-shadow: inset 6px 6px 4px #d1d1d1,
+          inset -6px -6px 4px #ffffff;
+        }
+
+    </style>
+</head>
+<body>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <div id="top">
+                <table>
+                    <tbody><tr><td></td></tr></tbody>
+                </table>
+            </div>
+
+            <div id="content">
+                <div id="content_top">
+                    <strong>Dear User,</strong>
+                    <strong>
+                        You are attempting to use a verification code for Cogni X. Please enter the following code within 5 minutes. If this was not initiated by you, please ignore this email.
+                    </strong>
+                    <div id="verificationCode">
+
+                        <div th:text="${code}" style="font-size: 40px"></div>
+                    </div>
+                </div>
+                <div id="content_bottom">
+                    <small>
+                        Thank you for your support of Cogni X.
+                        <br>(Staff will never ask for this code. Do not share it with anyone!)
+                    </small>
+                </div>
+            </div>
+            <div id="bottom">
+                <div>
+                    <p>This is an automated email. Please do not reply.<br>
+                        Keep your email account secure to prevent unauthorized access.
+                    </p>
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

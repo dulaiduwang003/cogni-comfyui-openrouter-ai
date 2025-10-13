@@ -1,0 +1,163 @@
+spring:
+  data:
+    redis:
+      database: 1
+      host: 127.0.0.1
+      port: 6379
+      password: "${REDIS_PASSWORD:}"
+  datasource:
+    username: "${DB_USERNAME:root}"
+    password: "${DB_PASSWORD:}"
+    url: jdbc:mysql://127.0.0.1:3306/ghosts?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&allowMultiQueries=true&useSSL=true
+  # 邮箱
+  mail:
+    host: smtp.qq.com
+    username: "${MAIL_USERNAME}"
+    password: "${MAIL_PASSWORD}"
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+    port: 587
+
+# 管理员账号初始化配置
+admin:
+  init:
+    enabled: true  # 是否启用管理员初始化
+    email: "${ADMIN_INIT_EMAIL:admin@example.com}"  # 管理员邮箱
+    password: "${ADMIN_INIT_PASSWORD:admin123}"  # 管理员密码
+    nickname: 系统管理员  # 管理员昵称
+    initial-credits: 1000000  # 初始积分
+
+ali:
+  certified:
+    access-key: "${ALI_ACCESS_KEY}"
+    secret-key: "${ALI_SECRET_KEY}"
+  oss:
+    endpoint: "oss-accelerate.aliyuncs.com"
+    bucket-name: "${ALI_OSS_BUCKET}"
+    domain: "${ALI_OSS_DOMAIN}"
+    # 支持的文件类型 全局
+    supported-file-types:
+      - extension: "jpg"
+        mimeType: "image/jpeg"
+        maxSizeInBytes: 5242880 # 5MB
+      - extension: "jpeg"
+        mimeType: "image/jpeg"
+        maxSizeInBytes: 5242880 # 5MB
+      - extension: "png"
+        mimeType: "image/png"
+        maxSizeInBytes: 5242880 # 5MB
+      - extension: "webp"
+        mimeType: "image/webp"
+        maxSizeInBytes: 5242880 # 5MB
+      - extension: "gif"
+        mimeType: "image/gif"
+        maxSizeInBytes: 10485760 # 10MB
+      - extension: "mp4"
+        mimeType: "video/mp4"
+        maxSizeInBytes: 104857600 # 100MB
+      - extension: "avi"
+        mimeType: "video/x-msvideo"
+        maxSizeInBytes: 104857600 # 100MB
+      - extension: "mp3"
+        mimeType: "audio/mpeg"
+        maxSizeInBytes: 20971520 # 20MB
+      - extension: "wav"
+        mimeType: "audio/x-wav"
+        maxSizeInBytes: 20971520 # 20MB
+      - extension: "pdf"
+        mimeType: "application/pdf"
+        maxSizeInBytes: 104857600 # 100MB
+
+comfyui:
+  #  服务器地址
+  server:
+    - name: COMFYUI-1号
+      url: ${COMFYUI_URL:http://localhost:8188}
+      
+  # 最大提交任务数量
+  submit-task-max: 100
+  # 任务
+  task:
+    # 连接comfyui服务器时 任务最大超时连接时间 秒
+    max-retry-time: 30
+    # 连接comfyui服务器时 如果出现错误 最大重试次数
+    max-retries: 2
+    # 超时检查时间间隔（分钟） 任务超时到达阈值后未执行完毕 自动归类于 失败 取消任务
+    timeout-check-interval: 30
+  # comfyui表单支持的文件类型
+  supported-file-types:
+    jpg: "image/jpeg"
+    jpeg: "image/jpeg"
+    png: "image/png"
+    webp: "image/webp"
+    gif: "image/gif"
+    mp4: "video/mp4"
+    avi: "video/x-msvideo"
+    mp3: "audio/mpeg"
+    wav: "audio/x-wav"
+
+# OpenRouter 配置
+open-router:
+  api-key: "${OPENROUTER_API_KEY}"
+  base-url: "https://openrouter.ai/api/v1"
+  connect-timeout: 30000
+  read-timeout: 60000
+  chat:
+    session-ttl-seconds: 2592000  # 会话TTL: 30天 (30 * 24 * 60 * 60)
+  # 上下文截断估算配置
+  truncation:
+    response-token-reserve: 2000   # 为回复预留token
+    text-chars-per-token: 4        # 文本字符/Token 
+    image-token-estimate: 1500     # 单张图片估算token
+    file-token-estimate: 4000      # 单个文件估算token
+    enable-compression: true       # 启用比例压缩文本
+  # 插件配置 所有模型都支持
+  plugins:
+    # 联网搜索插件配置
+    web:
+      # 是否开启联网搜索功能
+      enabled: true
+      # 搜索结果最大数量
+      max-results: 5
+    file-parser:
+      # 是否开启PDF解析
+      enabled: true
+      pdf:
+        # 处理引擎 支持：mistral-ocr (默认 最适合扫描文档或带图像的 PDF（1000页-2刀乐)  pdf-text(免费) native(根据识别token计费)
+        engine: mistral-ocr
+        static-filename: document.pdf
+  # 受支持的模型配置
+  remote-registry:
+    enabled: true
+    url: "https://openrouter.ai/api/frontend/models"
+    cron: "0 0/30 * * * ?"
+    read-timeout-seconds: 10
+    # 过滤模式：ALL（所有模型）、FREE（免费模型）、PAID（付费模型）`
+    filter: ALL
+    # 自动选择配置（优先级：modelId > prefer） 首选模型
+    auto:
+      modelId: f37736cd-7812-4202-ae41-c4c200436309   # 可选，固定模型ID（最高优先级）
+      prefer: FREE               # 可选：FREE 或 PAID
+  # 音频处理配置
+  audio:
+    max-size-bytes: 20971520 # 20MB
+    allowed-formats:
+      - wav
+      - mp3
+    default-format: wav # 默认音频格式
+  # 深度思考配置
+  reasoning:
+    enabled: true # 是否开启
+    max-tokens: 2000
+  # 上传限制配置
+  upload:
+    max-attachment-count: 8 # 附件数量限制
+
+server:
+  port: 9000
+  servlet:
+    context-path: /api

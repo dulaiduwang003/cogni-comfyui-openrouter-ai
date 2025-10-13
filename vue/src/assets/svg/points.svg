@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 主体硬币效果 -->
+  <circle cx="8" cy="8" r="7" fill="url(#coinGradient)" />
+  
+  <!-- 硬币光泽效果 -->
+  <path d="M8 1.5C4.41 1.5 1.5 4.41 1.5 8C1.5 11.59 4.41 14.5 8 14.5C11.59 14.5 14.5 11.59 14.5 8" 
+        stroke="rgba(255,255,255,0.7)" stroke-width="0.8" stroke-linecap="round" />
+  
+  <!-- 硬币边缘 -->
+  <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1" stroke-opacity="0.8" />
+  
+  <!-- 硬币中心 P 字母 -->
+  <path d="M6 5H10C10.5523 5 11 5.44772 11 6V7C11 7.55228 10.5523 8 10 8H7V11H6V5Z" fill="white"/>
+  <path d="M7 7H10C10 7 10 6 9 6H7V7Z" fill="url(#coinGradient)"/>
+  
+  <!-- 硬币光晕效果 -->
+  <circle cx="5" cy="5" r="1.5" fill="white" fill-opacity="0.3" />
+  
+  <!-- 渐变定义 -->
+  <defs>
+    <linearGradient id="coinGradient" x1="3" y1="3" x2="13" y2="13" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFD700" />
+      <stop offset="1" stop-color="#FFA500" />
+    </linearGradient>
+  </defs>
+</svg> 

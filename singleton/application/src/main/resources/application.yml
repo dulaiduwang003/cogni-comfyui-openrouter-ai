@@ -1,0 +1,44 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  codec:
+    max-in-memory-size: 10485760
+  jackson:
+    date-format: yyyy/MM/dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      file-size-threshold: 1024MB
+      max-request-size: 10MB
+      max-file-size: 10MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  data:
+    redis:
+      timeout: 10s
+      lettuce:
+        pool:
+          max-active: 200
+          max-wait: -1ms
+          max-idle: 10
+          min-idle: 0
+sa-token:
+  token-prefix: Bearer
+  token-name: Authorization
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  is-log: false
+  token-style: tik
+mybatis-plus:
+  typeAliasesPackage: com.cn.common.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    jdbc-type-for-null: 'null'
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  servlet:
+    context-path: /api
+

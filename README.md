@@ -25,7 +25,7 @@
 
 ### 演示用的Comfyui整合包
 通过网盘分享的文件：2_整合包ComfyUI-aki-1.6.rar等2个文件
-链接: https://pan.baidu.com/s/1hcsZiz367FtK4pJHRWVa_g?pwd=iavj 提取码: iavj 复制这段内容后打开百度网盘手机App，操作更方便哦
+链接: https://pan.baidu.com/s/1hcsZiz367FtK4pJHRWVa_g?pwd=iavj 提取码: iavj 
 ### 功能预览
 <p align="center">
 

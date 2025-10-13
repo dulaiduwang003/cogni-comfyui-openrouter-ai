@@ -254,7 +254,3 @@ npm run dev
   <img src="https://hyperbot.oss-accelerate.aliyuncs.com/TEMP/0942b17f-9eec-4291-adcb-612507b9dce6.jpg" alt="微信赞赏码" width="280" />
 </p>
 
-### 许可证
-当前仓库暂未显式声明许可证，建议在正式对外开源前补充 `LICENSE` 文件（常见选择：MIT/Apache-2.0）。
-
-

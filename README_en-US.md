@@ -254,7 +254,3 @@ If this project helps you, feel free to support via WeChat donation:
   <img src="https://hyperbot.oss-accelerate.aliyuncs.com/TEMP/0942b17f-9eec-4291-adcb-612507b9dce6.jpg" alt="WeChat Donation Code" width="280" />
 </p>
 
-### License
-This repository currently has no explicit license declared. It's recommended to add a `LICENSE` file before formal open-sourcing (common choices: MIT/Apache-2.0).
-
-

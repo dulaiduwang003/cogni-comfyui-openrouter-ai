@@ -254,5 +254,3 @@ IssueとPRを歓迎します:
   <img src="https://hyperbot.oss-accelerate.aliyuncs.com/TEMP/0942b17f-9eec-4291-adcb-612507b9dce6.jpg" alt="WeChat Donation Code" width="280" />
 </p>
 
-### ライセンス
-このリポジトリには現在、明確なライセンスが宣言されていません。正式なオープンソース化の前に`LICENSE`ファイルを追加することをお勧めします（一般的な選択肢: MIT/Apache-2.0）。

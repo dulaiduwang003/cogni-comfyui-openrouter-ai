@@ -40,6 +40,10 @@ A full-stack open-source project for AI creation and workflows: frontend built w
   <img src="https://hyperbot.oss-accelerate.aliyuncs.com/TEMP/4cad610a-3276-4888-b520-e3b66ccdb137.png" alt="功能预览12" width="150" />
 </p>
 
+### ComfyUI Starter Kit for Demonstration​
+Files shared via cloud storage: 2 files including "2_整合包ComfyUI-aki-1.6.rar"
+Link: https://pan.baidu.com/s/1hcsZiz367FtK4pJHRWVa_g?pwd=iavj Code: iavj
+
 ### Features
 - **Authentication & Authorization**: Built on Sa-Token with Bearer Token approach, includes built-in API access filtering and route filtering.
 - **Chat & AI Capabilities**: Integrated with OpenRouter, multi-model registration and auto-selection; SSE streaming chat, multi-language support with rich-text highlighting (primarily leverages free API model services - see yml config and backend docs for details).

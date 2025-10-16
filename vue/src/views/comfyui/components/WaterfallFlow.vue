@@ -6,6 +6,10 @@
       :list="processedItems"
       :gutter="10"
       :breakpoints="{
+        3000: { rowPerView: 10 },
+        2400: { rowPerView: 8 },
+        1920: { rowPerView: 7 },
+        1600: { rowPerView: 6 },
         1200: { rowPerView: 5 },
         1000: { rowPerView: 4 },
         800: { rowPerView: 3 },
@@ -23,12 +27,15 @@
         <div class="waterfall-item" :key="item.id" @click="handleItemClick(item)">
           <!-- 普通图片预览 -->
           <div v-if="!imageErrors[item.id]" class="image-wrapper">
+            <div v-if="!imageLoaded[item.id]" class="loading-spinner">
+              <el-icon class="is-loading" size="24" color="#888"><Loading /></el-icon>
+            </div>
             <LazyImg 
               :url="item.imageUrl" 
               :alt="item.title"
               class="waterfall-image"
               @error="() => handleImageError(item)"
-              @loaded="() => handleImageLoad(item)"
+              @success="() => handleImageLoad(item)"
             />
           </div>
           <!-- 错误状态 -->
@@ -37,8 +44,8 @@
             <p>图片加载失败</p>
           </div>
           
-          <div class="tag">{{ item.categoryName }}</div>
-          <div class="title-overlay">
+          <div class="tag" :style="{ opacity: imageLoaded[item.id] ? 1 : 0 }">{{ item.categoryName }}</div>
+          <div class="title-overlay" :style="{ opacity: imageLoaded[item.id] ? 1 : 0 }">
             <h3>{{ item.title }}</h3>
           </div>
         </div>
@@ -54,7 +61,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { LazyImg, Waterfall } from 'vue-waterfall-plugin-next'
-import { Picture } from '@element-plus/icons-vue'
+import { Picture, Loading } from '@element-plus/icons-vue'
 import 'vue-waterfall-plugin-next/dist/style.css'
 
 interface WaterfallItem {
@@ -153,17 +160,16 @@ const handleImageError = (item: WaterfallItem) => {
   imageErrors.value[item.id] = true;
 };
 
-const handleImageLoad = async (item: WaterfallItem) => {
+const handleImageLoad = (item: WaterfallItem) => {
   console.log('图片加载成功:', item.imageUrl, 'ID:', item.id);
  
-  imageLoaded.value[item.id] = true;
+  imageLoaded.value = { ...imageLoaded.value, [item.id]: true };
   imageErrors.value[item.id] = false;
   
   // 等待图片渲染完成后刷新布局
-  await nextTick();
-  setTimeout(() => {
+  nextTick(() => {
     refreshLayout();
-  }, 50);
+  });
 };
 
 
@@ -237,6 +243,7 @@ watch(containerWidth, async () => {
   border-radius: 15px;
   font-size: 12px;
   z-index: 1;
+  transition: opacity 0.3s ease;
 }
 
 .title-overlay {
@@ -247,6 +254,7 @@ watch(containerWidth, async () => {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
   padding: 20px 12px 10px 12px;
   color: white;
+  transition: opacity 0.3s ease;
 }
 
 .title-overlay h3 {
@@ -258,14 +266,27 @@ watch(containerWidth, async () => {
 
 
 .lazy__img[lazy=loading] {
-  padding: 5em 0;
-  width: 48px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    var(--el-fill-color-light) 25%,
+    var(--el-fill-color) 50%,
+    var(--el-fill-color-light) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
 }
 
 .lazy__img[lazy=loaded] {
   width: 100%;
   border-radius: 8px;
   transition: transform 0.3s ease;
+  animation: zoomIn 0.4s ease-out;
 }
 
 .lazy__img[lazy=loaded]:hover {
@@ -282,6 +303,14 @@ watch(containerWidth, async () => {
 
 .waterfall-image:hover {
   transform: scale(1.02);
+}
+
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
 .lazy__img {
@@ -314,5 +343,25 @@ watch(containerWidth, async () => {
 .loading-container {
   padding: 20px;
   width: 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 </style>

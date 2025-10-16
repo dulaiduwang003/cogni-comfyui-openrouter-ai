@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 import viteCompression from 'vite-plugin-compression'
@@ -6,7 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd())
+
   const isProduction = mode === 'production'
 
   return {
@@ -37,14 +37,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      proxy: {
-        [env.VITE_API_BASE_URL]: {
-          target: 'http://localhost:9090/api', // change to your real api url
-          changeOrigin: true,
-          rewrite: (path) =>
-            path.replace(new RegExp('^' + env.VITE_API_BASE_URL), '')
-        }
-      }
+      port: 8080
     },
     // 构建优化配置
     build: {

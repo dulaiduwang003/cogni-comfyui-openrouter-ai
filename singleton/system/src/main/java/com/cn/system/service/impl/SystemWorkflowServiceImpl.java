@@ -183,25 +183,25 @@ public class SystemWorkflowServiceImpl implements SystemWorkflowService {
         // 注意：需要排除数组类型的字段，因为数组通常是节点连接引用
         
         // 1. 检查文本输入（需管理员配置具体类型）
-        if ((inputs.containsKey(ComfyuiInputFieldEnum.TEXT.getFieldName()) && !isArrayValue(inputs.get(ComfyuiInputFieldEnum.TEXT.getFieldName())))
-                ||(inputs.containsKey(ComfyuiInputFieldEnum.MULTI_LINE_PROMPT.getFieldName()) && !isArrayValue(inputs.get(ComfyuiInputFieldEnum.MULTI_LINE_PROMPT.getFieldName())))
-                ||(inputs.containsKey(ComfyuiInputFieldEnum.RESOLUTION.getFieldName()) && !isArrayValue(inputs.get(ComfyuiInputFieldEnum.RESOLUTION.getFieldName())))) {
+        if ((inputs.containsKey(ComfyuiInputFieldEnum.TEXT.getFieldName()) && isArrayValue(inputs.get(ComfyuiInputFieldEnum.TEXT.getFieldName())))
+                ||(inputs.containsKey(ComfyuiInputFieldEnum.MULTI_LINE_PROMPT.getFieldName()) && isArrayValue(inputs.get(ComfyuiInputFieldEnum.MULTI_LINE_PROMPT.getFieldName())))
+                ||(inputs.containsKey(ComfyuiInputFieldEnum.RESOLUTION.getFieldName()) && isArrayValue(inputs.get(ComfyuiInputFieldEnum.RESOLUTION.getFieldName())))) {
             resultList.add(createConfigurableTextNode(nodeKey, ComfyuiInputFieldEnum.TEXT.getFieldName(), title));
         }
         
-        // 2. 检查图片上传
-        if (inputs.containsKey(ComfyuiInputFieldEnum.IMAGE.getFieldName()) && !isArrayValue(inputs.get(ComfyuiInputFieldEnum.IMAGE.getFieldName()))) {
-            resultList.add(createNode(nodeKey, ComfyuiFormTypeEnum.IMAGE_UPLOAD.getDec(), ComfyuiInputFieldEnum.IMAGE.getFieldName(), title, null));
+        // 2. 检查图片输入（需管理员配置具体类型）
+        if (inputs.containsKey(ComfyuiInputFieldEnum.IMAGE.getFieldName()) && isArrayValue(inputs.get(ComfyuiInputFieldEnum.IMAGE.getFieldName()))) {
+            resultList.add(createConfigurableImageNode(nodeKey, ComfyuiInputFieldEnum.IMAGE.getFieldName(), title));
         }
         
         // 3. 检查视频上传
-        if (inputs.containsKey(ComfyuiInputFieldEnum.VIDEO.getFieldName()) && !isArrayValue(inputs.get(ComfyuiInputFieldEnum.VIDEO.getFieldName()))) {
-            resultList.add(createNode(nodeKey, ComfyuiFormTypeEnum.VIDEO_UPLOAD.getDec(), ComfyuiInputFieldEnum.VIDEO.getFieldName(), title, null));
+        if (inputs.containsKey(ComfyuiInputFieldEnum.VIDEO.getFieldName()) && isArrayValue(inputs.get(ComfyuiInputFieldEnum.VIDEO.getFieldName()))) {
+            resultList.add(createNode(nodeKey, ComfyuiFormTypeEnum.VIDEO_UPLOAD.getDec(), ComfyuiInputFieldEnum.VIDEO.getFieldName(), title));
         }
         
         // 4. 检查音频上传
-        if (inputs.containsKey(ComfyuiInputFieldEnum.AUDIO.getFieldName()) && !isArrayValue(inputs.get(ComfyuiInputFieldEnum.AUDIO.getFieldName()))) {
-            resultList.add(createNode(nodeKey, ComfyuiFormTypeEnum.AUDIO_UPLOAD.getDec(), ComfyuiInputFieldEnum.AUDIO.getFieldName(), title, null));
+        if (inputs.containsKey(ComfyuiInputFieldEnum.AUDIO.getFieldName()) && isArrayValue(inputs.get(ComfyuiInputFieldEnum.AUDIO.getFieldName()))) {
+            resultList.add(createNode(nodeKey, ComfyuiFormTypeEnum.AUDIO_UPLOAD.getDec(), ComfyuiInputFieldEnum.AUDIO.getFieldName(), title));
         }
     }
 
@@ -228,28 +228,47 @@ public class SystemWorkflowServiceImpl implements SystemWorkflowService {
     }
 
     /**
-     * 创建节点对象
+     * 创建可配置的图片节点
      * 
      * @param nodeKey 节点 Key
-     * @param type 节点类型
      * @param nodeDigital 节点字段名
      * @param title 节点标题
-     * @param availableTypes 可选类型列表（null 表示不需要配置）
-     * @return 节点对象
+     * @return 图片节点对象（带可选类型列表）
      */
-    private ParsingWorkflowVo.FormNode createNode(String nodeKey, String type, 
-                                               String nodeDigital, String title, List<String> availableTypes) {
+    private ParsingWorkflowVo.FormNode createConfigurableImageNode(String nodeKey, String nodeDigital, String title) {
+        List<String> availableTypes = Arrays.asList(
+                ComfyuiFormTypeEnum.IMAGE_UPLOAD.getDec(),
+                ComfyuiFormTypeEnum.IMAGE_SCRIBBLE.getDec()
+        );
         return new ParsingWorkflowVo.FormNode()
                 .setNodeKey(nodeKey)
-                .setType(type)
+                .setType(ComfyuiFormTypeEnum.IMAGE_CONFIGURABLE.getDec())
                 .setNodeDigital(nodeDigital)
                 .setTips(title)
                 .setAvailableTypes(availableTypes);
     }
 
     /**
+     * 创建节点对象
+     *
+     * @param nodeKey     节点 Key
+     * @param type        节点类型
+     * @param nodeDigital 节点字段名
+     * @param title       节点标题
+     * @return 节点对象
+     */
+    private ParsingWorkflowVo.FormNode createNode(String nodeKey, String type, 
+                                               String nodeDigital, String title) {
+        return new ParsingWorkflowVo.FormNode()
+                .setNodeKey(nodeKey)
+                .setType(type)
+                .setNodeDigital(nodeDigital)
+                .setTips(title)
+                .setAvailableTypes(null);
+    }
+
+    /**
      * 判断值是否为数组类型
-     * 
      * ComfyUI 中，数组类型的字段通常是节点间的连接引用，格式如：["节点ID", 输出索引]
      * 例如：["4", 0] 表示引用节点 4 的第 0 个输出
      * 
@@ -257,12 +276,11 @@ public class SystemWorkflowServiceImpl implements SystemWorkflowService {
      * @return 如果是数组类型返回 true，否则返回 false
      */
     private boolean isArrayValue(Object value) {
-        return value instanceof List;
+        return !(value instanceof List);
     }
 
     /**
      * 保存工作流配置
-     * 
      * 功能：
      * 1. 验证输入节点配置（选择器类型必须有 options）
      * 2. 保存 workflow 主表
@@ -303,7 +321,7 @@ public class SystemWorkflowServiceImpl implements SystemWorkflowService {
                         .setTemplate(input.getTemplate())
                         .setRequired(Boolean.TRUE.equals(input.getRequired()) ? RequiredEnum.TRUE.getDec() : RequiredEnum.FALSE.getDec())
                         .setSize(input.getSize()))
-                .collect(Collectors.toList());
+                .toList();
         
         formList.forEach(workflowFormMapper::insert);
 
@@ -428,7 +446,6 @@ public class SystemWorkflowServiceImpl implements SystemWorkflowService {
 
     /**
      * 验证输入节点配置
-     * 
      * 规则：
      * - options 为可选项（包括 RADIO_SELECTOR/CHECKBOX_SELECTOR）
      * - 若提供 options，则必须为有效的 JSON 对象

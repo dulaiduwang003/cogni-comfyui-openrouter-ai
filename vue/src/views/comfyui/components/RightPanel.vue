@@ -103,8 +103,13 @@ const handleFormSubmit = async (submitData: Record<string, any>) => {
         const fieldKey = `${formItem.nodeKey}_${formItem.inputs}`
         const nodeValue = submitData.formData[fieldKey] || ''
         
-        // 判断是否为上传类型
-        const isUpload = [WorkflowFormTypeEnum.IMAGE_UPLOAD, WorkflowFormTypeEnum.AUDIO_UPLOAD, WorkflowFormTypeEnum.VIDEO_UPLOAD].includes(formItem.type)
+        // 判断是否为上传类型（包括图片涂抹）
+        const isUpload = [
+          WorkflowFormTypeEnum.IMAGE_UPLOAD, 
+          WorkflowFormTypeEnum.IMAGE_SCRIBBLE, 
+          WorkflowFormTypeEnum.AUDIO_UPLOAD, 
+          WorkflowFormTypeEnum.VIDEO_UPLOAD
+        ].includes(formItem.type)
         
         return {
           nodeKey: formItem.nodeKey,

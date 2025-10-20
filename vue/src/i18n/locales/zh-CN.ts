@@ -365,6 +365,30 @@ export default {
         maxLength: '内容长度不能超过{max}个字符',
         thisField: '此项'
       }
+    },
+    imageScribble: {
+      uploadTrigger: '上传图片以开始涂抹',
+      uploadHint: '支持 JPG、PNG、GIF，≤{size}MB',
+      reScribble: '重新涂抹',
+      dialogTitle: '图片涂抹',
+      uploadProgress: '{progress}%',
+      draw: '涂抹',
+      erase: '擦除',
+      brushSize: '笔刷大小：',
+      clear: '清空',
+      cancel: '取消',
+      confirm: '确认',
+      uploading: '上传中...',
+      processing: '正在处理图片...',
+      messages: {
+        fileSizeExceeded: '文件大小不能超过 {size}MB',
+        onlyImageAllowed: '只能上传图片文件',
+        uploadSuccess: '图片上传成功，现在可以开始涂抹',
+        uploadFailed: '图片加载失败，请重试',
+        canvasNotInitialized: '画布未初始化，请重新上传图片',
+        scribbleComplete: '涂抹完成，图片已上传',
+        processingFailed: '处理图片失败，请重试'
+      }
     }
   },
   system: {
@@ -627,6 +651,8 @@ export default {
         RADIO_SELECTOR: '单选',
         CHECKBOX_SELECTOR: '多选',
         IMAGE_UPLOAD: '图片上传',
+        IMAGE_SCRIBBLE: '图片涂抹',
+        IMAGE_CONFIGURABLE: '图片类（需选择具体控件）',
         VIDEO_UPLOAD: '视频上传',
         AUDIO_UPLOAD: '音频上传',
         TEXT_CONFIGURABLE: '文本类（需选择具体控件）'

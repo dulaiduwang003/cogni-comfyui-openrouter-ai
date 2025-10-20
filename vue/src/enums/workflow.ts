@@ -1,6 +1,8 @@
 // ComfyUI 表单类型枚举
 export enum WorkflowFormTypeEnum {
     IMAGE_UPLOAD = "IMAGE_UPLOAD", //上传图片控件
+    IMAGE_SCRIBBLE = "IMAGE_SCRIBBLE", //图片涂抹控件
+    IMAGE_CONFIGURABLE = "IMAGE_CONFIGURABLE", //图片类（需选择具体控件）
     AUDIO_UPLOAD = "AUDIO_UPLOAD", //上传音频控件
     VIDEO_UPLOAD = "VIDEO_UPLOAD", //上传视频控件
     RADIO_SELECTOR = "RADIO_SELECTOR", //单选下拉框

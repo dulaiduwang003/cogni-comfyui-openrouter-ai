@@ -26,6 +26,10 @@ Cogni X is a modern AI application platform based on Vue 3, offering a variety o
 - 🔐 **User Authentication**: Login, registration, and access control
 - 🛠️ **System Management**: Backend administration functions (requires admin privileges)
 
+### Changelog
+
+- **2025-10-28**: Added ComfyUI image scribble component
+
 ---
 
 ## ⚙️ Environment Requirements

@@ -37,9 +37,19 @@ public enum ComfyuiFormTypeEnum {
     CHECKBOX_SELECTOR("CHECKBOX_SELECTOR"),
 
     /**
+     * 图片可配置类型（解析阶段使用，需要管理员选择具体类型）
+     */
+    IMAGE_CONFIGURABLE("IMAGE_CONFIGURABLE"),
+
+    /**
      * 图片上传
      */
     IMAGE_UPLOAD("IMAGE_UPLOAD"),
+
+    /**
+     * 图片涂抹组件（用户上传图片后可以涂抹）
+     */
+    IMAGE_SCRIBBLE("IMAGE_SCRIBBLE"),
 
     /**
      * 视频上传

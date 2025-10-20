@@ -37,6 +37,14 @@
               @update:model-value="updateFormValue(formItem, $event)"
             />
 
+            <!-- 图片涂抹组件 -->
+            <ImageScribble
+              v-else-if="formItem.type === WorkflowFormTypeEnum.IMAGE_SCRIBBLE"
+              :form-item="formItem"
+              :model-value="formValues[getFieldKey(formItem)]"
+              @update:model-value="updateFormValue(formItem, $event)"
+            />
+
             <!-- 文件上传 -->
             <FileUpload
               v-else-if="[WorkflowFormTypeEnum.IMAGE_UPLOAD, WorkflowFormTypeEnum.AUDIO_UPLOAD, WorkflowFormTypeEnum.VIDEO_UPLOAD].includes(formItem.type)"
@@ -93,6 +101,7 @@ import type { GetWorkflowInterfaceApi } from '@/api/workflow-task/types'
 import { WorkflowFormTypeEnum } from '@/enums'
 import TextPromptInput from './form-components/TextPromptInput.vue'
 import FileUpload from './form-components/FileUpload.vue'
+import ImageScribble from './form-components/ImageScribble.vue'
 import RadioSelector from './form-components/RadioSelector.vue'
 import CheckboxSelector from './form-components/CheckboxSelector.vue'
 

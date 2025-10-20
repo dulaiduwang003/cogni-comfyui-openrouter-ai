@@ -502,7 +502,7 @@ const handleDownload = async () => {
   downloading.value = true
   
   try {
-    // 创建一个临时的a标签来触发下载
+
     const link = document.createElement('a')
     link.href = workDetail.value.url
     link.download = `作品_${workDetail.value.workflowResultId}_${workDetail.value.workflowName || 'unnamed'}`
@@ -511,9 +511,6 @@ const handleDownload = async () => {
       link.click()
       document.body.removeChild(link)
 
-    ElNotification.info({
-        message: t('workDetail.downloadUnavailable')
-      })
   } catch (error) {
     console.error('下载失败:', error)
     ElNotification.error({
@@ -537,11 +534,10 @@ const handleDeleteConfirm = async () => {
         confirmButtonClass: 'el-button--danger'
       }
     )
-    
-    // 执行删除操作
+
     await handleDelete()
   } catch (error) {
-    // 用户取消删除，不做任何操作
+
     console.log('用户取消删除')
   }
 }

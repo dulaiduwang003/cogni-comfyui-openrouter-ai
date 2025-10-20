@@ -501,11 +501,19 @@ const onWorkflowFileChange = async (e: Event) => {
     // 初始化可编辑表单配置
     configFormNodes.value = data.formNodeList.map(n => ({
       nodeKey: n.nodeKey,
-      type: n.type === WorkflowFormTypeEnum.TEXT_CONFIGURABLE ? WorkflowFormTypeEnum.TEXT_PROMPT : (n.type as any),
+      type: n.type === WorkflowFormTypeEnum.TEXT_CONFIGURABLE 
+        ? WorkflowFormTypeEnum.TEXT_PROMPT 
+        : n.type === WorkflowFormTypeEnum.IMAGE_CONFIGURABLE 
+        ? WorkflowFormTypeEnum.IMAGE_UPLOAD 
+        : (n.type as any),
       inputs: n.nodeDigital as WorkflowResultModelDigitalEnum,
       tips: n.tips || '',
       required: true,
-      size: n.type === WorkflowFormTypeEnum.IMAGE_UPLOAD || n.type === WorkflowFormTypeEnum.VIDEO_UPLOAD || n.type === WorkflowFormTypeEnum.AUDIO_UPLOAD ? 10 : 500,
+      size: n.type === WorkflowFormTypeEnum.IMAGE_UPLOAD 
+        || n.type === WorkflowFormTypeEnum.IMAGE_CONFIGURABLE 
+        || n.type === WorkflowFormTypeEnum.IMAGE_SCRIBBLE 
+        || n.type === WorkflowFormTypeEnum.VIDEO_UPLOAD 
+        || n.type === WorkflowFormTypeEnum.AUDIO_UPLOAD ? 10 : 500,
       template: '',
       options: n.type === WorkflowFormTypeEnum.TEXT_CONFIGURABLE ? '' : undefined,
       enabled: true
@@ -520,11 +528,15 @@ const onWorkflowFileChange = async (e: Event) => {
 }
 
 const getAvailableTypes = (item: ConfigFormNode) => {
-  // 文本类可切换三种，文件类固定
+  // 文本类可切换三种
   if (item.inputs === WorkflowResultModelDigitalEnum.TEXT || item.inputs === WorkflowResultModelDigitalEnum.MULTI_LINE_PROMPT || item.inputs === WorkflowResultModelDigitalEnum.RESOLUTION) {
     return [WorkflowFormTypeEnum.TEXT_PROMPT, WorkflowFormTypeEnum.RADIO_SELECTOR, WorkflowFormTypeEnum.CHECKBOX_SELECTOR]
   }
-  if (item.inputs === WorkflowResultModelDigitalEnum.IMAGE) return [WorkflowFormTypeEnum.IMAGE_UPLOAD]
+  // 图片类可切换两种：IMAGE_UPLOAD / IMAGE_SCRIBBLE
+  if (item.inputs === WorkflowResultModelDigitalEnum.IMAGE) {
+    return [WorkflowFormTypeEnum.IMAGE_UPLOAD, WorkflowFormTypeEnum.IMAGE_SCRIBBLE]
+  }
+  // 其他文件类固定
   if (item.inputs === WorkflowResultModelDigitalEnum.VIDEO) return [WorkflowFormTypeEnum.VIDEO_UPLOAD]
   if (item.inputs === WorkflowResultModelDigitalEnum.AUDIO) return [WorkflowFormTypeEnum.AUDIO_UPLOAD]
   return [WorkflowFormTypeEnum.TEXT_PROMPT]

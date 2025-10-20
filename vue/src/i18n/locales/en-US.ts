@@ -365,6 +365,30 @@ export default {
         maxLength: 'Content length cannot exceed {max} characters',
         thisField: 'this field'
       }
+    },
+    imageScribble: {
+      uploadTrigger: 'Upload image to start scribbling',
+      uploadHint: 'Supports JPG, PNG, GIF, ≤{size}MB',
+      reScribble: 'Re-scribble',
+      dialogTitle: 'Image Scribble',
+      uploadProgress: '{progress}%',
+      draw: 'Draw',
+      erase: 'Erase',
+      brushSize: 'Brush Size:',
+      clear: 'Clear',
+      cancel: 'Cancel',
+      confirm: 'Confirm',
+      uploading: 'Uploading...',
+      processing: 'Processing image...',
+      messages: {
+        fileSizeExceeded: 'File size cannot exceed {size}MB',
+        onlyImageAllowed: 'Only image files are allowed',
+        uploadSuccess: 'Image uploaded successfully, you can start scribbling now',
+        uploadFailed: 'Image loading failed, please try again',
+        canvasNotInitialized: 'Canvas not initialized, please re-upload the image',
+        scribbleComplete: 'Scribble complete, image uploaded',
+        processingFailed: 'Image processing failed, please try again'
+      }
     }
   },
   system: {
@@ -627,6 +651,8 @@ export default {
         RADIO_SELECTOR: 'Radio',
         CHECKBOX_SELECTOR: 'Checkbox',
         IMAGE_UPLOAD: 'Image Upload',
+        IMAGE_SCRIBBLE: 'Image Scribble',
+        IMAGE_CONFIGURABLE: 'Image Type (select specific control)',
         VIDEO_UPLOAD: 'Video Upload',
         AUDIO_UPLOAD: 'Audio Upload',
         TEXT_CONFIGURABLE: 'Text Type (select specific control)'

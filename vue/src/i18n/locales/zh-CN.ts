@@ -14,7 +14,9 @@ export default {
     success: '成功',
     error: '错误',
     warning: '警告',
-    info: '信息'
+    info: '信息',
+    yes: '是',
+    no: '否'
   },
   auth: {
     login: '登录',
@@ -162,6 +164,8 @@ export default {
     taskId: '任务ID：',
     workType: '作品类型：',
     createTime: '创建时间：',
+    formParams: '生成参数：',
+    noTips: '无提示信息',
     download: '下载作品',
     delete: '删除作品',
     deleteConfirm: '确定要删除这个作品吗？删除后将无法恢复。',
@@ -180,7 +184,17 @@ export default {
     imageLoadFailed: '图片加载失败',
     modelLoadFailed: '3D模型加载失败',
     audioTitle: '音频作品',
-    unnamedWorkflow: '未命名工作流'
+    unnamedWorkflow: '未命名工作流',
+    paramImage: '参数图片',
+    types: {
+      textPrompt: '文本提示词',
+      radioSelector: '单选选择器',
+      checkboxSelector: '多选选择器',
+      imageUpload: '图片上传',
+      imageScribble: '图片涂鸦',
+      videoUpload: '视频上传',
+      audioUpload: '音频上传'
+    }
   },
 
   // AI 对话相关
@@ -663,6 +677,11 @@ export default {
         audio: '音频'
       },
       validation: {
+        nameRequired: '请输入工作流名称',
+        nameLength: '名称长度在 1 到 100 个字符',
+        categoryRequired: '请选择类别',
+        creditsRequired: '请输入扣除积分',
+        creditsMin: '积分不能小于 0',
         categoryNameRequired: '请输入类别名称',
         categoryNameLength: '长度在 1 到 50 个字符',
         fileFormatError: '请上传 .json 文件',

@@ -1,8 +1,8 @@
 package com.cn.comfyui.listener;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cn.comfyui.constant.ComfyuiConstant;
 import com.cn.common.enums.ComfyuiWorksTypeEnum;
@@ -67,7 +67,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-import static com.alibaba.fastjson.JSON.parseObject;
+import static com.alibaba.fastjson2.JSON.parseObject;
 import static com.cn.comfyui.constant.ComfyuiConstant.COMFYUI_QUEUE_INDEX;
 import static com.cn.comfyui.constant.ComfyuiConstant.COMFYUI_TASK_LIST;
 import static com.cn.comfyui.utils.ComfyuiUtils.getBodyError;
@@ -864,7 +864,15 @@ public class TaskProcessingListener {
         final String key = COMFYUI_TASK_LIST + userId;
         TaskInfoStructure o = (TaskInfoStructure) redisUtils.hashGet(key, taskId);
 
-        works.setUrl(uploadUrl).setWorkflowName(o.getWorkflowName());
+        works.setUrl(uploadUrl)
+            .setWorkflowName(o.getWorkflowName())
+            .setWorkflowId(workflowId);
+
+        // 保存表单参数（包含元数据），用于前端展示和重新制作
+        if (o.getForm() != null) {
+            works.setFormParams(JSON.parseObject(JSON.toJSONString(o.getForm())));
+        }
+
         worksMapper.insert(works);
 
         // 任务成功完成，消费冻结的积分

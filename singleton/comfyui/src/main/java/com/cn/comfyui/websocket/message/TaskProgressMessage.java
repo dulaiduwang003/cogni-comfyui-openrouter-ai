@@ -1,6 +1,6 @@
 package com.cn.comfyui.websocket.message;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.cn.comfyui.model.WorkflowResultModel;
 import lombok.Builder;
 import lombok.Data;

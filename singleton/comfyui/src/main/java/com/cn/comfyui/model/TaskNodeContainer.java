@@ -22,5 +22,21 @@ public class TaskNodeContainer {
 
     private Boolean isUpload;
 
+    // ========== 元数据字段（用于前端显示和作品记录）==========
+
+    /**
+     * 表单提示文字
+     */
+    private String tips;
+
+    /**
+     * 表单类型（TEXT_PROMPT、IMAGE_UPLOAD、RADIO_SELECTOR 等）
+     */
+    private String type;
+
+    /**
+     * 选择器选项（JSON 数组字符串）
+     */
+    private String options;
 
 }

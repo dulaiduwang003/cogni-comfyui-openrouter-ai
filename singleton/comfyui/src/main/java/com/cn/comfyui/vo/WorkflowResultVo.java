@@ -1,5 +1,6 @@
 package com.cn.comfyui.vo;
 
+import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -28,4 +29,15 @@ public class WorkflowResultVo implements Serializable {
     private String taskId;
 
     private LocalDateTime createTime;
+
+    /**
+     * 工作流ID
+     */
+    private Long workflowId;
+
+    /**
+     * 生成时使用的表单参数（包含 tips、type、options 等元数据）
+     * 用于前端展示和重新制作
+     */
+    private JSONObject formParams;
 }

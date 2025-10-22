@@ -1,8 +1,8 @@
        package com.cn.llm.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.cn.common.enums.FilePathEnum;
 import com.cn.common.utils.UploadUtil;
 import com.cn.common.utils.RedisUtils;
@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import static com.alibaba.fastjson.JSON.parseObject;
+import static com.alibaba.fastjson2.JSON.parseObject;
 
 /**
  * LLM 服务实现类

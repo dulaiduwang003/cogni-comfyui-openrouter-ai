@@ -173,30 +173,68 @@
       </div>
       
       <!-- 右侧信息 -->
-      <div class="detail-info-section">
-        <div class="info-item">
-          <label class="info-label">{{ t('workDetail.workflowName') }}</label>
-          <span class="info-value">{{ workDetail.workflowName || t('workDetail.unnamedWorkflow') }}</span>
-        </div>
-        
-        <div class="info-item">
-          <label class="info-label">{{ t('workDetail.taskId') }}</label>
-          <span class="info-value task-id-text">{{ workDetail.taskId }}</span>
-        </div>
-        
-        <div class="info-item">
-          <label class="info-label">{{ t('workDetail.workType') }}</label>
-          <div class="info-value">
-            <div class="type-display">
-              <div class="type-icon" v-html="getTypeIcon(workDetail.type)"></div>
-              <span>{{ getTypeDisplayName(workDetail.type) }}</span>
+      <div class="detail-info-wrapper">
+        <div class="detail-info-section">
+          <div class="info-item">
+            <label class="info-label">{{ t('workDetail.workflowName') }}</label>
+            <span class="info-value">{{ workDetail.workflowName || t('workDetail.unnamedWorkflow') }}</span>
+          </div>
+          
+          <div class="info-item">
+            <label class="info-label">{{ t('workDetail.taskId') }}</label>
+            <span class="info-value task-id-text">{{ workDetail.taskId }}</span>
+          </div>
+          
+          <div class="info-item">
+            <label class="info-label">{{ t('workDetail.workType') }}</label>
+            <div class="info-value">
+              <div class="type-display">
+                <div class="type-icon" v-html="getTypeIcon(workDetail.type)"></div>
+                <span>{{ getTypeDisplayName(workDetail.type) }}</span>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="info-item">
-          <label class="info-label">{{ t('workDetail.createTime') }}</label>
-          <span class="info-value">{{ formatDetailTime(workDetail.createTime) }}</span>
+          
+          <div class="info-item">
+            <label class="info-label">{{ t('workDetail.createTime') }}</label>
+            <span class="info-value">{{ formatDetailTime(workDetail.createTime) }}</span>
+          </div>
+          
+          <!-- 表单参数展示 -->
+          <div v-if="workDetail.formParams?.taskNodeContainer?.length > 0" class="info-item form-params-section">
+            <label class="info-label">{{ t('workDetail.formParams') }}</label>
+            <div class="form-params-content">
+              <div v-for="(node, index) in workDetail.formParams.taskNodeContainer" :key="index" class="param-item">
+                <div class="param-header">
+                  <span class="param-type-badge" :class="getTypeBadgeClass(node.type)">
+                    {{ getTypeLabel(node.type) }}
+                  </span>
+                  <span class="param-tips">{{ node.tips || t('workDetail.noTips') }}</span>
+                </div>
+                <!-- 图片类型展示（缩略图） -->
+                <div v-if="isImageType(node.type)" class="param-image-thumbnail">
+                  <el-image
+                    v-if="node.nodeValue"
+                    :src="node.nodeValue"
+                    fit="cover"
+                    :preview-src-list="[node.nodeValue]"
+                    :initial-index="0"
+                    class="thumbnail-image"
+                    :alt="node.tips || t('workDetail.paramImage')"
+                  >
+                    <template #error>
+                      <div class="thumbnail-error">
+                        <el-icon><Picture /></el-icon>
+                      </div>
+                    </template>
+                  </el-image>
+                  <div v-else class="param-value">-</div>
+                </div>
+                <!-- 普通文本值展示 -->
+                <div v-else class="param-value">{{ formatNodeValue(node) }}</div>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div class="info-actions">
@@ -242,7 +280,7 @@ import { useI18n } from 'vue-i18n'
 import {  ElMessageBox, ElNotification } from 'element-plus'
 import { Picture, Download, Delete, VideoPlay, VideoPause, Warning, Loading } from '@element-plus/icons-vue'
 import { WorkflowResultModelApi } from '@/api/workflow-result/workflow-result'
-import { WorkflowResultModelTypeEnum } from '@/enums/workflow'
+import { WorkflowResultModelTypeEnum, WorkflowFormTypeEnum } from '@/enums/workflow'
 import Model3DPreview from '@/views/works/components/Model3DPreview.vue'
 
 const { t } = useI18n()
@@ -321,6 +359,63 @@ const formatDetailTime = (timeStr) => {
     minute: '2-digit',
     second: '2-digit'
   })
+}
+
+// 获取表单类型的显示标签
+const getTypeLabel = (type) => {
+  const typeLabels = {
+    [WorkflowFormTypeEnum.TEXT_PROMPT]: t('workDetail.types.textPrompt'),
+    [WorkflowFormTypeEnum.RADIO_SELECTOR]: t('workDetail.types.radioSelector'),
+    [WorkflowFormTypeEnum.CHECKBOX_SELECTOR]: t('workDetail.types.checkboxSelector'),
+    [WorkflowFormTypeEnum.IMAGE_UPLOAD]: t('workDetail.types.imageUpload'),
+    [WorkflowFormTypeEnum.IMAGE_SCRIBBLE]: t('workDetail.types.imageScribble'),
+    [WorkflowFormTypeEnum.VIDEO_UPLOAD]: t('workDetail.types.videoUpload'),
+    [WorkflowFormTypeEnum.AUDIO_UPLOAD]: t('workDetail.types.audioUpload')
+  }
+  return typeLabels[type] || type
+}
+
+// 获取类型徽章的 CSS 类
+const getTypeBadgeClass = (type) => {
+  const classMap = {
+    [WorkflowFormTypeEnum.TEXT_PROMPT]: 'badge-text',
+    [WorkflowFormTypeEnum.RADIO_SELECTOR]: 'badge-select',
+    [WorkflowFormTypeEnum.CHECKBOX_SELECTOR]: 'badge-select',
+    [WorkflowFormTypeEnum.IMAGE_UPLOAD]: 'badge-image',
+    [WorkflowFormTypeEnum.IMAGE_SCRIBBLE]: 'badge-image',
+    [WorkflowFormTypeEnum.VIDEO_UPLOAD]: 'badge-video',
+    [WorkflowFormTypeEnum.AUDIO_UPLOAD]: 'badge-audio'
+  }
+  return classMap[type] || 'badge-default'
+}
+
+// 判断是否是图片类型
+const isImageType = (type) => {
+  return type === WorkflowFormTypeEnum.IMAGE_UPLOAD || type === WorkflowFormTypeEnum.IMAGE_SCRIBBLE
+}
+
+// 格式化节点值
+const formatNodeValue = (node) => {
+  const value = node.nodeValue
+  
+  if (value === null || value === undefined || value === '') {
+    return '-'
+  }
+  
+  // 对于选择器类型，如果有 options，可以显示更友好
+  if ((node.type === 'RADIO_SELECTOR' || node.type === 'CHECKBOX_SELECTOR') && node.options) {
+    try {
+      const options = JSON.parse(node.options)
+      // 如果当前值在选项中，直接显示
+      if (options.includes(value)) {
+        return value
+      }
+    } catch (e) {
+      // 解析失败，直接返回原值
+    }
+  }
+  
+  return String(value)
 }
 
 // 获取作品详情
@@ -598,7 +693,7 @@ defineExpose({
 }
 
 .skeleton-image-large {
-  width: 350px;
+  width: 280px;
   background: var(--el-fill-color-light);
   border-radius: 8px;
   flex-shrink: 0;
@@ -621,19 +716,20 @@ defineExpose({
 
 .detail-preview-section {
   flex-shrink: 0;
-  width: 350px;
+  width: 280px;
   display: flex;
 }
 
 .detail-image-container {
   width: 100%;
+  height: fit-content;
+  max-height: 500px;
   border-radius: 8px;
   overflow: hidden;
   background: var(--el-fill-color-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
 }
 
 .detail-image {
@@ -884,12 +980,41 @@ defineExpose({
   height: 14px;
 }
 
+.detail-info-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
 .detail-info-section {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 8px 0;
+  padding: 8px 16px 8px 0;
+  overflow-y: auto;
+}
+
+/* 自定义滚动条样式 */
+.detail-info-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.detail-info-section::-webkit-scrollbar-track {
+  background: var(--el-fill-color-lighter);
+  border-radius: 3px;
+}
+
+.detail-info-section::-webkit-scrollbar-thumb {
+  background: var(--el-border-color);
+  border-radius: 3px;
+  transition: background 0.3s;
+}
+
+.detail-info-section::-webkit-scrollbar-thumb:hover {
+  background: var(--el-border-color-dark);
 }
 
 .info-item {
@@ -937,29 +1062,125 @@ defineExpose({
   stroke: var(--el-color-primary);
 }
 
-.info-actions {
-  margin-top: auto;
-  padding-top: 16px;
+/* 表单参数展示样式 - 简约风格 */
+.form-params-section {
+  margin-top: 4px;
+}
+
+.form-params-content {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.param-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+}
+
+.param-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.param-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.param-type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--el-fill-color);
+  color: var(--el-text-color-secondary);
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.param-tips {
+  color: var(--el-text-color-regular);
+  font-size: 13px;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.param-value {
+  color: var(--el-text-color-primary);
+  font-size: 13px;
+  line-height: 1.6;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* 参数图片缩略图样式 */
+.param-image-thumbnail {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.thumbnail-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  overflow: hidden;
+}
+
+.thumbnail-image:hover {
+  opacity: 0.85;
+}
+
+.thumbnail-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  color: var(--el-text-color-placeholder);
+  background: var(--el-fill-color-light);
+  border-radius: 4px;
+}
+
+.thumbnail-error .el-icon {
+  font-size: 20px;
+}
+
+.info-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 12px 16px 0 0;
+  border-top: 1px solid var(--el-border-color-lighter);
 }
 
 .action-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 10px 16px;
+  gap: 5px;
+  padding: 6px 12px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   user-select: none;
   border: 1px solid;
-  min-height: 36px;
+  min-height: 32px;
   flex: 1;
+}
+
+.action-button .el-icon {
+  font-size: 14px;
 }
 
 .download-button {

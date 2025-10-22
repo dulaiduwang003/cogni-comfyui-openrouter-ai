@@ -51,6 +51,7 @@
       v-model="dialogVisible"
       :title="t('comfyui.imageScribble.dialogTitle')"
       width="90%"
+      style="max-width: 800px"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       class="scribble-dialog"
@@ -97,7 +98,7 @@
             
             <div class="brush-size-control">
               <span class="control-label">{{ t('comfyui.imageScribble.brushSize') }}</span>
-              <el-slider v-model="brushSize" :min="5" :max="50" :show-tooltip="false" style="width: 150px" />
+              <el-slider v-model="brushSize" :min="5" :max="50" :show-tooltip="false" style="width: 120px" />
               <span class="control-value">{{ brushSize }}</span>
             </div>
             
@@ -765,8 +766,8 @@ onMounted(() => {
 .canvas-toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
+  gap: 12px;
+  padding: 12px;
   background: var(--el-bg-color-overlay);
   border: 1px solid var(--el-border-color-lighter);
   border-radius: 8px;
@@ -780,6 +781,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .control-label {
@@ -797,8 +799,9 @@ onMounted(() => {
 
 .toolbar-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
 .canvas-area {
@@ -899,6 +902,7 @@ canvas {
     gap: 0;
     border-radius: 4px;
     overflow: hidden;
+    flex-shrink: 0;
   }
   
   .button-group .custom-button {
@@ -914,9 +918,9 @@ canvas {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 16px;
-    font-size: 14px;
+    gap: 4px;
+    padding: 6px 12px;
+    font-size: 13px;
     border-radius: 4px;
     border: 1px solid var(--el-border-color);
     background-color: var(--el-fill-color-light);
@@ -924,6 +928,7 @@ canvas {
     cursor: pointer;
     transition: all 0.2s ease;
     user-select: none;
+    white-space: nowrap;
   }
   
   .custom-button:hover {

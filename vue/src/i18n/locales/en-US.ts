@@ -14,7 +14,9 @@ export default {
     success: 'Success',
     error: 'Error',
     warning: 'Warning',
-    info: 'Info'
+    info: 'Info',
+    yes: 'Yes',
+    no: 'No'
   },
   auth: {
     login: 'Login',
@@ -162,6 +164,8 @@ export default {
     taskId: 'Task ID:',
     workType: 'Work Type:',
     createTime: 'Created:',
+    formParams: 'Generation Parameters:',
+    noTips: 'No tips',
     download: 'Download',
     delete: 'Delete',
     deleteConfirm: 'Are you sure you want to delete this work? This action cannot be undone.',
@@ -180,7 +184,17 @@ export default {
     imageLoadFailed: 'Image loading failed',
     modelLoadFailed: '3D model loading failed',
     audioTitle: 'Audio Work',
-    unnamedWorkflow: 'Unnamed Workflow'
+    unnamedWorkflow: 'Unnamed Workflow',
+    paramImage: 'Parameter Image',
+    types: {
+      textPrompt: 'Text Prompt',
+      radioSelector: 'Radio Selector',
+      checkboxSelector: 'Checkbox Selector',
+      imageUpload: 'Image Upload',
+      imageScribble: 'Image Scribble',
+      videoUpload: 'Video Upload',
+      audioUpload: 'Audio Upload'
+    }
   },
 
   // AI Chat
@@ -663,6 +677,11 @@ export default {
         audio: 'Audio'
       },
       validation: {
+        nameRequired: 'Please enter workflow name',
+        nameLength: 'Name length between 1 and 100 characters',
+        categoryRequired: 'Please select a category',
+        creditsRequired: 'Please enter credits deducted',
+        creditsMin: 'Credits cannot be less than 0',
         categoryNameRequired: 'Please enter category name',
         categoryNameLength: 'Length between 1 and 50 characters',
         fileFormatError: 'Please upload a .json file',

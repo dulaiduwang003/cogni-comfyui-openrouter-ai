@@ -78,7 +78,7 @@
       </div>
     </el-card>
     <!-- 新建工作流对话框 -->
-    <el-dialog v-model="createDialogVisible" :title="t('system.workflow.dialog.createTitle')" width="880px" class="workflow-dialog">
+    <el-dialog v-model="createDialogVisible" :title="t('system.workflow.dialog.createTitle')" width="880px" class="workflow-dialog" @close="resetAll">
       <div class="dialog-content">
         <!-- 基本信息 -->
         <el-card shadow="never" class="section-card">
@@ -86,8 +86,8 @@
             <div class="section-header">{{ t('system.workflow.dialog.basicInfo') }}</div>
           </template>
           <div class="base-form">
-            <el-form :model="baseForm" label-width="100px" label-position="left">
-              <el-form-item :label="t('system.workflow.dialog.name')" required>
+            <el-form ref="createFormRef" :model="baseForm" :rules="createFormRules" label-width="100px" label-position="left">
+              <el-form-item :label="t('system.workflow.dialog.name')" prop="name">
                 <el-input v-model="baseForm.name" :placeholder="t('system.workflow.dialog.namePlaceholder')" />
               </el-form-item>
               <el-form-item :label="t('system.workflow.dialog.cover')">
@@ -101,12 +101,12 @@
               <el-form-item :label="t('system.workflow.dialog.description')">
                 <el-input v-model="baseForm.description" type="textarea" :rows="2" :placeholder="t('system.workflow.dialog.descriptionPlaceholder')" />
               </el-form-item>
-              <el-form-item :label="t('system.workflow.dialog.category')" required>
+              <el-form-item :label="t('system.workflow.dialog.category')" prop="workflowCategoryId">
                 <el-select v-model="baseForm.workflowCategoryId" :placeholder="t('system.workflow.dialog.categoryPlaceholder')" style="width: 260px">
                   <el-option v-for="c in categoryList" :key="c.categoryId" :label="c.name" :value="c.categoryId" />
                 </el-select>
               </el-form-item>
-              <el-form-item :label="t('system.workflow.dialog.credits')" required>
+              <el-form-item :label="t('system.workflow.dialog.credits')" prop="creditsDeducted">
                 <el-input-number v-model="baseForm.creditsDeducted" :min="0" :max="100000" />
               </el-form-item>
             </el-form>
@@ -186,12 +186,12 @@
     </el-dialog>
 
     <!-- 编辑工作流对话框 -->
-    <el-dialog v-model="editDialogVisible" :title="t('system.workflow.dialog.editTitle')" width="520px" class="workflow-edit-dialog">
-      <el-form :model="editForm" label-width="100px">
-        <el-form-item :label="t('system.workflow.dialog.name')" required>
+    <el-dialog v-model="editDialogVisible" :title="t('system.workflow.dialog.editTitle')" width="520px" class="workflow-edit-dialog" @close="onEditDialogClose">
+      <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="100px">
+        <el-form-item :label="t('system.workflow.dialog.name')" prop="name">
           <el-input v-model="editForm.name" />
         </el-form-item>
-        <el-form-item :label="t('system.workflow.dialog.category')" required>
+        <el-form-item :label="t('system.workflow.dialog.category')" prop="workflowCategoryId">
           <el-select v-model="editForm.workflowCategoryId" :placeholder="t('system.workflow.dialog.categoryPlaceholder')" style="width: 260px">
             <el-option v-for="c in categoryList" :key="c.categoryId" :label="c.name" :value="c.categoryId" />
           </el-select>
@@ -258,6 +258,8 @@ const saving = ref(false)
 const updating = ref(false)
 
 const jsonFileRef = ref<HTMLInputElement | null>(null)
+const createFormRef = ref<FormInstance>()
+const editFormRef = ref<FormInstance>()
 
 const baseForm = reactive({
   name: '',
@@ -266,6 +268,21 @@ const baseForm = reactive({
   workflowCategoryId: '',
   creditsDeducted: 0
 })
+
+// 创建工作流表单验证规则
+const createFormRules = computed<FormRules>(() => ({
+  name: [
+    { required: true, message: t('system.workflow.validation.nameRequired'), trigger: 'blur' },
+    { min: 1, max: 100, message: t('system.workflow.validation.nameLength'), trigger: 'blur' }
+  ],
+  workflowCategoryId: [
+    { required: true, message: t('system.workflow.validation.categoryRequired'), trigger: 'change' }
+  ],
+  creditsDeducted: [
+    { required: true, message: t('system.workflow.validation.creditsRequired'), trigger: 'blur' },
+    { type: 'number', min: 0, message: t('system.workflow.validation.creditsMin'), trigger: 'blur' }
+  ]
+}))
 
 const parseResult = reactive<ParsingWorkflowVo>({
   json: '',
@@ -358,6 +375,17 @@ onMounted(() => {
 const editDialogVisible = ref(false)
 const editForm = reactive<{ workflowId: number | null; name: string; workflowCategoryId: number | null }>({ workflowId: null, name: '', workflowCategoryId: null })
 
+// 编辑工作流表单验证规则
+const editFormRules = computed<FormRules>(() => ({
+  name: [
+    { required: true, message: t('system.workflow.validation.nameRequired'), trigger: 'blur' },
+    { min: 1, max: 100, message: t('system.workflow.validation.nameLength'), trigger: 'blur' }
+  ],
+  workflowCategoryId: [
+    { required: true, message: t('system.workflow.validation.categoryRequired'), trigger: 'change' }
+  ]
+}))
+
 const openEditDialog = (row: { workflowId: number; name: string; categoryName: string }) => {
   editForm.workflowId = row.workflowId
   editForm.name = row.name
@@ -367,22 +395,27 @@ const openEditDialog = (row: { workflowId: number; name: string; categoryName: s
 }
 
 const submitUpdate = async () => {
-  if (!editForm.workflowId || !editForm.name || !editForm.workflowCategoryId) return
-  try {
-    updating.value = true
-    await workflowApi.updateWorkflow({
-      workflowId: editForm.workflowId,
-      name: editForm.name,
-      workflowCategoryId: editForm.workflowCategoryId
-    })
-    ElNotification.success(t('system.workflow.messages.updateSuccess'))
-    editDialogVisible.value = false
-    loadPage()
-  } catch (e) {
-    console.error(e)
-  } finally {
-    updating.value = false
-  }
+  if (!editFormRef.value) return
+  await editFormRef.value.validate(async (valid) => {
+    if (!valid) return
+    if (!editForm.workflowId) return
+    
+    try {
+      updating.value = true
+      await workflowApi.updateWorkflow({
+        workflowId: editForm.workflowId,
+        name: editForm.name,
+        workflowCategoryId: editForm.workflowCategoryId!
+      })
+      ElNotification.success(t('system.workflow.messages.updateSuccess'))
+      editDialogVisible.value = false
+      loadPage()
+    } catch (e) {
+      console.error(e)
+    } finally {
+      updating.value = false
+    }
+  })
 }
 
 const confirmDelete = async (row: { workflowId: number; name: string }) => {
@@ -559,7 +592,14 @@ const canSubmit = computed(() => {
 })
 
 const handleSave = async () => {
+  if (!createFormRef.value) return
+  
+  // 先验证基础表单
+  const valid = await createFormRef.value.validate().catch(() => false)
+  if (!valid) return
+  
   if (!canSubmit.value) return
+  
   // 选择器需要校验 options
   const enabledFormNodes = configFormNodes.value.filter(n => n.enabled)
   for (const item of enabledFormNodes) {
@@ -606,6 +646,7 @@ const handleSave = async () => {
     await workflowApi.saveWorkflowConfig(payload)
     ElNotification.success(t('system.workflow.messages.saveSuccess'))
     createDialogVisible.value = false
+    await loadPage()
   } catch (err: any) {
     console.error(err)
   } finally {
@@ -634,6 +675,12 @@ const resetAll = () => {
   parseResult.formNodeList = []
   configFormNodes.value = []
   outputNodes.value = []
+  createFormRef.value?.clearValidate()
+}
+
+// 编辑对话框关闭时清除验证
+const onEditDialogClose = () => {
+  editFormRef.value?.clearValidate()
 }
 </script>
 

@@ -406,13 +406,40 @@ public class WorkflowServiceImpl implements WorkflowService {
                         Long queueSize = redisUtils.keySize(ComfyuiConstant.COMFYUI_QUEUE);
                         redisUtils.hashPut(COMFYUI_QUEUE_INDEX, taskId, queueSize);
 
-                        // 保存表单 用于重新制作
+                        // 查询工作流表单配置（包含 tips、type、options 等元数据）
+                        List<WorkflowForm> workflowForms = workflowsFormMapper.selectList(
+                            new QueryWrapper<WorkflowForm>()
+                                .lambda()
+                                .eq(WorkflowForm::getWorkflowId, workflowId)
+                        );
+
+                        // 创建表单配置映射（nodeKey + "_" + inputs 作为唯一键）
+                        Map<String, WorkflowForm> formConfigMap = workflowForms.stream()
+                            .collect(Collectors.toMap(
+                                form -> form.getNodeKey() + "_" + form.getInputs(),
+                                form -> form
+                            ));
+
+                        // 保存表单 用于重新制作（附加元数据）
                         List<TaskNodeContainer> taskContainers = containers.stream()
-                                .map(c -> new TaskNodeContainer()
-                                        .setIsUpload(c.getIsUpload())
-                                        .setInputs(c.getInputs())
-                                        .setNodeKey(c.getNodeKey())
-                                        .setNodeValue(c.getNodeValue()))
+                                .map(c -> {
+                                    TaskNodeContainer container = new TaskNodeContainer()
+                                            .setIsUpload(c.getIsUpload())
+                                            .setInputs(c.getInputs())
+                                            .setNodeKey(c.getNodeKey())
+                                            .setNodeValue(c.getNodeValue());
+                                    
+                                    // 从表单配置中获取元数据
+                                    String key = c.getNodeKey() + "_" + c.getInputs();
+                                    WorkflowForm formConfig = formConfigMap.get(key);
+                                    if (formConfig != null) {
+                                        container.setTips(formConfig.getTips());
+                                        container.setType(formConfig.getType());
+                                        container.setOptions(formConfig.getOptions());
+                                    }
+                                    
+                                    return container;
+                                })
                                 .toList();
 
                         TaskInfoStructure.Form form = new TaskInfoStructure.Form()

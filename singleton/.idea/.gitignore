@@ -1,0 +1,5 @@
+# 默认忽略的文件
+/shelf/
+/workspace.xml
+# 依赖于环境的 Maven 主目录路径
+/mavenHomeManager.xml

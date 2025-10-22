@@ -79,13 +79,16 @@ export const useTaskWebSocketStore = defineStore('taskWebsocket', () => {
       // 设置事件监听
       setupEventListeners()
 
-      // 连接WebSocket
+      // 连接WebSocket（使用优化的配置）
       await taskWebSocket.connect({
         url: import.meta.env.VITE_API_BASE_URL + comfyuiTaskApi.getComfyuiTaskProgressWebsocketUrl(),
         token: token,
-        maxRetries: 3,
-        retryInterval: 5000,
-        heartbeatInterval: 30000
+        maxRetries: 5,                    // 最多重连5次
+        retryInterval: 3000,              // 基础重连间隔3秒
+        heartbeatInterval: 30000,         // 心跳间隔30秒
+        heartbeatTimeout: 10000,          // 心跳超时10秒
+        retryStrategy: 'exponential',     // 使用指数退避策略
+        maxRetryInterval: 60000           // 最大重连间隔60秒
       })
 
       console.log('WebSocket连接成功')

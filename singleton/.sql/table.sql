@@ -136,8 +136,11 @@ create table ghosts.workflow_result
     user_id       bigint                             not null,
     type          varchar(100)                       not null,
     url           varchar(255)                       null,
+    workflow_id   bigint                             null comment '工作流ID',
+    form_params   json                               null comment 'JSON格式存储，包含workflowId和taskNodeContainer数组',
     create_time   datetime default CURRENT_TIMESTAMP null,
-    update_time   datetime default CURRENT_TIMESTAMP not null
+    update_time   datetime default CURRENT_TIMESTAMP not null,
+    key           idx_workflow_id (workflow_id)
 )
     comment '工作流作品表';
 

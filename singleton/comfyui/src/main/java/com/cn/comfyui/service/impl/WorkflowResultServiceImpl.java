@@ -51,7 +51,9 @@ public class WorkflowResultServiceImpl implements WorkflowResultService {
                 .setType(works.getType())
                 .setWorkflowName(works.getWorkflowName())
                 .setTaskId(works.getTaskId())
-                .setUrl(works.getUrl());
+                .setUrl(works.getUrl())
+                .setWorkflowId(works.getWorkflowId())
+                .setFormParams(works.getFormParams());
     }
 
     @Override
@@ -97,9 +99,10 @@ public class WorkflowResultServiceImpl implements WorkflowResultService {
                 .setWorkflowResultId(c.getId())
                 .setTaskId(c.getTaskId())
                 .setWorkflowName(c.getWorkflowName())
-
                 .setType(c.getType())
-                .setUrl(c.getUrl()));
+                .setUrl(c.getUrl())
+                .setWorkflowId(c.getWorkflowId())
+                .setFormParams(c.getFormParams()));
 
         // 构建返回结果
         return new BasePage<WorkflowResultVo>()

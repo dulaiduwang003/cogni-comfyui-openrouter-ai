@@ -1,10 +1,10 @@
 package com.cn.comfyui.utils;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.alibaba.fastjson.JSON.parseObject;
+import static com.alibaba.fastjson2.JSON.parseObject;
 
 /**
  * ComfyUI工具类

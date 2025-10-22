@@ -1,8 +1,8 @@
 package com.cn.llm.registry;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.cn.common.base.BasePage;
 import com.cn.llm.dto.GetAvailableModelPageDto;
 import com.cn.llm.dto.GetAvailableModelListDto;
@@ -375,13 +375,13 @@ public class RemoteRegistryStore {
     /**
      * 根据模型 id 返回完整的模型对象（包含 supportPdf、supportWeb 字段）
      */
-    public com.alibaba.fastjson.JSONObject getById(String id) {
-        final com.alibaba.fastjson.JSONArray current = fastjsonArrayRef.get();
+    public com.alibaba.fastjson2.JSONObject getById(String id) {
+        final com.alibaba.fastjson2.JSONArray current = fastjsonArrayRef.get();
         if (current == null || current.isEmpty() || id == null || id.isBlank()) {
             return null;
         }
         for (Object o : current) {
-            if (!(o instanceof com.alibaba.fastjson.JSONObject item)) continue;
+            if (!(o instanceof com.alibaba.fastjson2.JSONObject item)) continue;
             String itemId = item.getString("id");
             if (id.equals(itemId)) {
                 // 注入 supportPdf 回显字段

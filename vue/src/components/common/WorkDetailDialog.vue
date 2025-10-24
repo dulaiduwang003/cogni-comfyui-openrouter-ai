@@ -180,7 +180,7 @@
             <span class="info-value">{{ workDetail.workflowName || t('workDetail.unnamedWorkflow') }}</span>
           </div>
           
-          <div class="info-item">
+          <div class="info-item" v-if="false">
             <label class="info-label">{{ t('workDetail.taskId') }}</label>
             <span class="info-value task-id-text">{{ workDetail.taskId }}</span>
           </div>

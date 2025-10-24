@@ -41,7 +41,10 @@
           <img :src="modelValue" :alt="t('comfyui.imageScribble.dialogTitle')" class="preview-image" />
           
           <div v-show="showOverlay" class="preview-overlay">
-            <el-button type="primary" @click="openDialog">{{ t('comfyui.imageScribble.reScribble') }}</el-button>
+            <div class="overlay-actions">
+              <el-button type="primary" size="small" @click="openDialog">{{ t('comfyui.imageScribble.reScribble') }}</el-button>
+              <el-button size="small" @click="clearSelectedImage">{{ t('comfyui.imageScribble.clear') }}</el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -277,6 +280,15 @@ const openDialog = () => {
       initCanvas()
     })
   }
+}
+
+// 清除已选择的图片并允许重新上传
+const clearSelectedImage = () => {
+  emit('update:model-value', '')
+  uploadedImageUrl.value = ''
+  showOverlay.value = false
+  // 通过变更 key 强制重建 upload 组件，恢复可上传状态
+  uploadKey.value++
 }
 
 const handleDialogClose = () => {
@@ -637,10 +649,7 @@ const confirmScribble = async () => {
     
   } catch (error) {
     console.error('Confirm scribble error:', error)
-    ElNotification.error({
-      title: t('common.error'),
-      message: t('comfyui.imageScribble.messages.processingFailed')
-    })
+   
   } finally {
     submitting.value = false
     loading.close()
@@ -854,6 +863,11 @@ canvas {
   border-radius: 12px;
   opacity: 0;
   transition: opacity 0.3s ease;
+}
+
+.overlay-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .scribble-preview:hover .preview-overlay {

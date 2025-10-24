@@ -76,8 +76,27 @@ public class TaskProgressWebSocketHandler implements WebSocketHandler {
     
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        // 目前不处理客户端消息，如需要可以扩展
-        log.debug("收到WebSocket消息: {}", message.getPayload());
+        try {
+            // 处理客户端消息
+            String payload = message.getPayload().toString();
+            log.debug("收到WebSocket消息: {}", payload);
+            
+            // 解析消息
+            Map<String, Object> msgMap = JSON.parseObject(payload, Map.class);
+            String type = (String) msgMap.get("type");
+            
+            // 处理 ping 消息，回复 pong
+            if ("ping".equals(type)) {
+                Map<String, Object> pongMsg = new ConcurrentHashMap<>();
+                pongMsg.put("type", "pong");
+                pongMsg.put("timestamp", System.currentTimeMillis());
+                session.sendMessage(new TextMessage(JSON.toJSONString(pongMsg)));
+                log.debug("回复pong消息");
+            }
+            
+        } catch (Exception e) {
+            log.warn("处理WebSocket消息失败: {}", e.getMessage());
+        }
     }
     
     @Override

@@ -83,10 +83,10 @@ export const useTaskWebSocketStore = defineStore('taskWebsocket', () => {
       await taskWebSocket.connect({
         url: import.meta.env.VITE_API_BASE_URL + comfyuiTaskApi.getComfyuiTaskProgressWebsocketUrl(),
         token: token,
-        maxRetries: 5,                    // 最多重连5次
+        maxRetries: Infinity,             // 无限重连
         retryInterval: 3000,              // 基础重连间隔3秒
-        heartbeatInterval: 30000,         // 心跳间隔30秒
-        heartbeatTimeout: 10000,          // 心跳超时10秒
+        heartbeatInterval: 30000,         // 每30秒发送一次心跳
+        heartbeatTimeout: 0,              // 禁用超时检测（仅发送/接收心跳）
         retryStrategy: 'exponential',     // 使用指数退避策略
         maxRetryInterval: 60000           // 最大重连间隔60秒
       })
@@ -406,11 +406,11 @@ export const useTaskWebSocketStore = defineStore('taskWebsocket', () => {
         workflowResultModel: workflowResultModel || existingTask.workflowResultModel,
         location: newLocation
       }
-      console.log(`更新任务状态: ${taskId} -> ${status}${progress !== undefined ? ` (${progress}%)` : ''}${newLocation !== undefined ? ` 队列位置: ${newLocation}` : ''}${workflowName ? ` [${workflowName}]` : ''}${workflowResultModel ? ` 作品:${workflowResultModel.type}` : ''}`)
+      console.log(`WebSocket更新任务: ${taskId} -> ${status}${progress !== undefined ? ` (${progress}%)` : ''}${newLocation !== undefined ? ` 队列位置: ${newLocation}` : ''}`)
     } else {
-      // 如果任务不存在，可能是新提交的任务，主动刷新列表
-      console.log(`发现新任务: ${taskId}，刷新任务列表`)
-      refreshTasks()
+      // 任务不存在时不主动刷新，避免与任务提交流程的刷新冲突
+      // 任务列表会在打开面板时或任务提交后自动刷新
+      console.log(`收到新任务WebSocket消息: ${taskId}，等待任务列表刷新`)
     }
   }
 

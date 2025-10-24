@@ -125,6 +125,7 @@ export default {
     noMore: 'No more tasks',
     noTasks: 'No tasks yet',
     waitingAt: 'Waiting, currently at',
+    joining: 'Joining',
     viewWork: 'View Work',
     cancel: 'Cancel Task',
     remake: 'Remake',

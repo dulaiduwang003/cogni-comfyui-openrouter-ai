@@ -106,8 +106,9 @@
                 <div class="task-right">
                   <span class="task-status" :class="formatTaskStatus(task.status).class">
                     {{ formatTaskStatus(task.status).text }}
-                    <span v-if="task.status === WorkflowTaskStatusEnum.WAIT && task.location > 0" class="queue-position">
-                      #{{ task.location }}
+                    <span v-if="task.status === WorkflowTaskStatusEnum.WAIT" class="queue-position">
+                      <template v-if="task.location && task.location > 0">#{{ task.location }}</template>
+                      <template v-else>{{ t('task.joining') }}</template>
                     </span>
                   </span>
                 </div>
@@ -142,28 +143,34 @@
                 <button 
                   v-if="task.status === WorkflowTaskStatusEnum.WAIT"
                   class="action-btn cancel-btn"
+                  :class="{ 'is-loading': isCanceling(task.taskId) }"
+                  :disabled="isCanceling(task.taskId)"
                   @click="cancelTask(task)"
                   title="取消任务"
                 >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <svg v-if="!isCanceling(task.taskId)" width="12" height="12" viewBox="0 0 24 24" fill="none">
                     <path d="m18 6-12 12" stroke="currentColor" stroke-width="2"/>
                     <path d="m6 6 12 12" stroke="currentColor" stroke-width="2"/>
                   </svg>
+                  <span v-else class="btn-spinner" />
                 </button>
                 
                 <!-- 重新制作按钮 -->
                 <button 
                   v-if="task.status === WorkflowTaskStatusEnum.FAILED || task.status === WorkflowTaskStatusEnum.SUCCEED || task.status === WorkflowTaskStatusEnum.CANCELED"
                   class="action-btn remake-btn"
+                  :class="{ 'is-loading': isRemaking(task.taskId) }"
+                  :disabled="isRemaking(task.taskId)"
                   @click="remakeTask(task)"
                   title="重新制作"
                 >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <svg v-if="!isRemaking(task.taskId)" width="12" height="12" viewBox="0 0 24 24" fill="none">
                     <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" stroke="currentColor" stroke-width="2"/>
                     <path d="M3 3v5h5" stroke="currentColor" stroke-width="2"/>
                     <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" stroke="currentColor" stroke-width="2"/>
                     <path d="M21 21v-5h-5" stroke="currentColor" stroke-width="2"/>
                   </svg>
+                  <span v-else class="btn-spinner" />
                 </button>
                 </div>
               </div>
@@ -224,14 +231,22 @@ const taskListRef = ref<HTMLElement>()
 const workDetailVisible = ref(false)
 const workDetailDialogRef = ref()
 
+// 每个任务的操作loading状态，避免重复提交
+const cancelingTaskIds = ref<Set<string | number>>(new Set())
+const remakingTaskIds = ref<Set<string | number>>(new Set())
+
+const isCanceling = (taskId: string | number) => cancelingTaskIds.value.has(taskId)
+const isRemaking = (taskId: string | number) => remakingTaskIds.value.has(taskId)
+
 // 从WebSocket Store获取任务状态
 const tasksState = computed(() => webSocketStore.getTasksState)
 
 // 切换任务面板
 const toggleTaskPanel = async () => {
   showTaskPanel.value = !showTaskPanel.value
-  if (showTaskPanel.value && tasksState.value.tasks.length === 0) {
-    await webSocketStore.loadTasks(true)
+  // 打开时刷新任务列表
+  if (showTaskPanel.value) {
+    await webSocketStore.refreshTasks()
   }
 }
 
@@ -289,9 +304,8 @@ const selectStatus = (status: WorkflowTaskStatusEnum | '') => {
 // 打开任务面板的方法（供外部调用）
 const openTaskPanel = async () => {
   showTaskPanel.value = true
-  if (tasksState.value.tasks.length === 0) {
-    await webSocketStore.loadTasks(true)
-  }
+  // 每次打开都刷新任务列表，确保显示最新数据
+  await webSocketStore.refreshTasks()
 }
 
 // 点击外部关闭任务面板
@@ -330,43 +344,39 @@ const viewArtwork = (task: any) => {
 
 // 重新制作
 const remakeTask = async (task: any) => {
+  if (isRemaking(task.taskId)) return
+  remakingTaskIds.value.add(task.taskId)
   try {
-    // 调用重新制作任务API
     await comfyuiTaskApi.reqRemakeComfyuiTask({ taskId: task.taskId })
-    
-    // 显示成功提示
     ElNotification.success({
       title: t('common.success'),
       message: t('task.remakeSuccess'),
       duration: 3000
     })
-    
-    // 刷新任务列表以显示新任务
     await webSocketStore.refreshTasks()
   } catch (error) {
     console.error('重新制作任务失败:', error)
-   
+  } finally {
+    remakingTaskIds.value.delete(task.taskId)
   }
 }
 
 // 取消任务
 const cancelTask = async (task: any) => {
+  if (isCanceling(task.taskId)) return
+  cancelingTaskIds.value.add(task.taskId)
   try {
-    // 调用取消任务API
     await comfyuiTaskApi.reqCancelComfyuiTask({ taskId: task.taskId })
-    
-    // 显示成功提示
     ElNotification.success({
       title: t('common.success'),
       message: t('task.cancelSuccess'),
       duration: 2000
     })
-    
-    // 刷新任务列表
     await webSocketStore.refreshTasks()
   } catch (error) {
     console.error('取消任务失败:', error)
-
+  } finally {
+    cancelingTaskIds.value.delete(task.taskId)
   }
 }
 
@@ -914,6 +924,22 @@ html[class*=" theme-dark"] .navbar-icon {
 .action-btn:hover {
   background: var(--el-fill-color);
   transform: scale(1.1);
+}
+
+.action-btn.is-loading,
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--el-border-color-lighter);
+  border-top: 2px solid var(--el-color-primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
 }
 
 .action-btn svg {

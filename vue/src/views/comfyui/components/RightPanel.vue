@@ -138,23 +138,22 @@ const handleFormSubmit = async (submitData: Record<string, any>) => {
       showClose: true
     })
 
-    // 自动打开任务面板让用户查看进度
-    setTimeout(() => {
-      webSocketStore.triggerTaskPanelOpen()
-    }, 500)
-
     // 刷新用户积分
     userStore.refreshUserCredits()
 
-    // 主动刷新任务列表
-    if (webSocketStore.isConnected) {
-      // 延迟一小段时间再刷新
-      setTimeout(() => {
-        webSocketStore.refreshTasks()
-      }, 1000)
-    }
+    // 立即刷新任务列表（不依赖WebSocket连接状态）
+    // 使用短延迟确保后端任务已创建完成
+    setTimeout(async () => {
+      await webSocketStore.refreshTasks()
+      console.log('任务提交后刷新任务列表完成')
+    }, 300)
 
-    console.log('任务提交成功，等待WebSocket推送更新')
+    // 打开任务面板让用户查看进度
+    setTimeout(() => {
+      webSocketStore.triggerTaskPanelOpen()
+    }, 400)
+
+    console.log('任务提交成功')
 
     emit('close')
 

@@ -125,6 +125,7 @@ export default {
     noMore: '没有更多任务了',
     noTasks: '暂无任务',
     waitingAt: '等待中,当前排在',
+    joining: '加入中',
     viewWork: '查看作品',
     cancel: '取消任务',
     remake: '重新制作',

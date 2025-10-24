@@ -30,6 +30,7 @@ export class TaskWebSocketService {
   private reconnectTimer: number | null = null
   private heartbeatTimeoutTimer: number | null = null
   private lastHeartbeatTime: number = 0
+  private isHeartbeatTimeout: boolean = false  // 标记是否是心跳超时导致的关闭
   private networkOnlineHandler: (() => void) | null = null
   private visibilityChangeHandler: (() => void) | null = null
   
@@ -71,11 +72,11 @@ export class TaskWebSocketService {
     }
 
     this.config = {
-      maxRetries: 5,
-      retryInterval: 3000,
+      maxRetries: Infinity, // 无限重试
+      retryInterval: 2000, // 2秒重试间隔
       heartbeatInterval: 30000,
       heartbeatTimeout: 10000,
-      retryStrategy: 'exponential',
+      retryStrategy: 'fixed', // 使用固定间隔策略
       maxRetryInterval: 60000,
       ...config
     }
@@ -201,11 +202,17 @@ export class TaskWebSocketService {
         console.log('WebSocket连接关闭:', event.code, event.reason)
         this.isConnecting = false
         this._stopHeartbeat()
+
+        this.ws = null
         
-        if (!this.isDestroyed && event.code !== 1000) {
-          // 非正常关闭，尝试重连
+
+        const shouldReconnect = !this.isDestroyed
+        
+        if (shouldReconnect) {
+          // 尝试重连
           this.isReconnecting = true
-          this._attemptReconnect('连接意外关闭')
+          const reason = this.isHeartbeatTimeout ? '心跳超时' : '连接意外关闭'
+          this._attemptReconnect(reason)
         } else {
           // 正常关闭或已销毁，通知disconnect
           this.listeners.onDisconnect?.(event.reason || '连接关闭')
@@ -260,7 +267,11 @@ export class TaskWebSocketService {
       return
     }
 
-    if (this.retryCount >= (this.config.maxRetries || 5)) {
+    // 无限重试模式：移除重试次数上限检查
+    const maxRetries = this.config.maxRetries || 5
+    const isInfiniteRetry = maxRetries === Infinity
+    
+    if (!isInfiniteRetry && this.retryCount >= maxRetries) {
       console.error('WebSocket重连次数已达上限，停止重连')
       this.isReconnecting = false
       this.listeners.onDisconnect?.('重连失败')
@@ -270,7 +281,11 @@ export class TaskWebSocketService {
     this.retryCount++
     const delay = this._calculateRetryDelay()
 
-    console.log(`WebSocket将在${delay}ms后进行第${this.retryCount}/${this.config.maxRetries}次重连 (原因: ${reason})`)
+    // 显示友好的日志
+    const retryInfo = isInfiniteRetry 
+      ? `第${this.retryCount}次重连` 
+      : `第${this.retryCount}/${maxRetries}次重连`
+    console.log(`WebSocket将在${delay}ms后进行${retryInfo} (原因: ${reason})`)
 
     this.reconnectTimer = window.setTimeout(async () => {
       if (this.isDestroyed) {
@@ -279,16 +294,19 @@ export class TaskWebSocketService {
       }
 
       try {
-        console.log(`开始第${this.retryCount}次重连...`)
+        console.log(`开始${retryInfo}...`)
+        // 重置心跳超时标志
+        this.isHeartbeatTimeout = false
         await this._connect()
-        // 重连成功
+        // 重连成功，重置计数器
         console.log('重连成功!')
+        this.retryCount = 0
         this.isReconnecting = false
       } catch (error) {
-        console.warn(`第${this.retryCount}次重连失败:`, error)
+        console.warn(`${retryInfo}失败:`, error)
         
         // 检查是否已达到最大重连次数
-        if (this.retryCount >= (this.config!.maxRetries || 5)) {
+        if (!isInfiniteRetry && this.retryCount >= maxRetries) {
           console.error('所有重连尝试都已失败')
           this.isReconnecting = false
           this.listeners.onDisconnect?.('重连失败')
@@ -337,6 +355,9 @@ export class TaskWebSocketService {
       
       if (timeSinceLastHeartbeat > (this.config!.heartbeatTimeout || 10000)) {
         console.warn('心跳超时，连接可能已断开，尝试重连...')
+        
+        // 标记为心跳超时，以便在 onclose 中触发重连
+        this.isHeartbeatTimeout = true
         
         // 关闭当前连接并重连
         if (this.ws) {
@@ -422,14 +443,16 @@ export class TaskWebSocketService {
       if (document.visibilityState === 'visible') {
         console.log('页面切换到前台，检查WebSocket连接状态...')
         
-        // 页面回到前台时，检查连接状态
-        if (!this.isConnected && !this.isConnecting && !this.isDestroyed && this.config) {
+        // 页面回到前台时，检查连接状态（避免与已有重连流程冲突）
+        if (!this.isConnected && !this.isConnecting && !this.isReconnecting && !this.isDestroyed && this.config) {
           console.log('WebSocket未连接，尝试重新连接...')
           this.retryCount = 0
           this._attemptReconnect('页面切回前台')
         } else if (this.isConnected) {
           // 如果已连接，发送一个心跳确认连接正常
           this.send({ type: 'ping' })
+        } else if (this.isReconnecting) {
+          console.log('WebSocket正在重连中，无需重复触发')
         }
       }
     }

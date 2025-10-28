@@ -1,6 +1,7 @@
 package com.cn.comfyui.service;
 
 import com.cn.common.base.BasePage;
+import com.cn.comfyui.dto.BatchDeleteWorkflowResultDto;
 import com.cn.comfyui.dto.WorkflowResultDto;
 import com.cn.comfyui.vo.WorkflowResultVo;
 
@@ -18,5 +19,7 @@ public interface WorkflowResultService {
     WorkflowResultVo getWorkflowResultDetail(final Long workflowResultId);
 
     void deleteWorkflowResult(final WorkflowResultDto dto);
+
+    void batchDeleteWorkflowResult(final BatchDeleteWorkflowResultDto dto);
 
 }

@@ -28,7 +28,13 @@ Cogni X is a modern AI application platform based on Vue 3, offering a variety o
 
 ### Changelog
 
-- **2025-10-28**: Added ComfyUI image scribble component
+- **2025-10-28**: 
+  - Added ComfyUI image scribble component
+  - Added batch delete functionality for creations
+    - Support for multi-selecting creations for batch deletion
+    - Optimized checkbox styles for dark theme
+    - Optimized button and dialog styles for dark theme
+    - Enhanced delete confirmation interaction experience
 
 ---
 

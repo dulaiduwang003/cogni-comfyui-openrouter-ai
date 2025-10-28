@@ -1,8 +1,17 @@
 <template>
   <div 
     class="work-card"
-    @click="$emit('click', work)"
+    :class="{ 'selection-mode': selectionMode, 'selected': isSelected }"
+    @click="handleCardClick"
   >
+    <!-- 选择模式复选框 -->
+    <div v-if="selectionMode" class="selection-checkbox" @click.stop="handleSelect">
+      <el-checkbox 
+        :model-value="isSelected"
+        size="small"
+      />
+    </div>
+    
     <div class="work-image">
       <!-- 3D模型预览 -->
       <Model3DPreview
@@ -84,11 +93,33 @@ const props = defineProps({
   work: {
     type: Object,
     required: true
+  },
+  selectionMode: {
+    type: Boolean,
+    default: false
+  },
+  isSelected: {
+    type: Boolean,
+    default: false
   }
 })
 
 // Emits
-const emit = defineEmits(['click', 'imageError'])
+const emit = defineEmits(['click', 'imageError', 'select'])
+
+// 处理卡片点击
+const handleCardClick = () => {
+  if (props.selectionMode) {
+    handleSelect()
+  } else {
+    emit('click', props.work)
+  }
+}
+
+// 处理选择
+const handleSelect = () => {
+  emit('select', props.work)
+}
 
 // 获取作品类型显示名称
 const getTypeDisplayName = (type) => {
@@ -152,11 +183,94 @@ const handleImageError = () => {
   cursor: pointer;
   border: 1px solid var(--el-border-color-lighter);
   width: 100%;
+  position: relative;
 }
 
 .work-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.work-card.selection-mode {
+  cursor: pointer;
+}
+
+.work-card.selected {
+  border: 2px solid var(--el-color-primary);
+  box-shadow: 0 4px 16px rgba(64, 158, 255, 0.3);
+}
+
+/* 暗色主题下选中状态更明显 */
+html.dark .work-card.selected {
+  box-shadow: 0 4px 20px rgba(64, 158, 255, 0.5);
+}
+
+.selection-checkbox {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+
+  border-radius: 4px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selection-checkbox:hover {
+
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 暗色主题适配 */
+html.dark .selection-checkbox {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .selection-checkbox:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* 复选框样式 - 参考 CheckboxSelector */
+.selection-checkbox :deep(.el-checkbox__inner) {
+  background-color: var(--el-bg-color);
+  border-color: var(--el-border-color);
+  transition: all 0.3s ease;
+}
+
+.selection-checkbox :deep(.el-checkbox__input:hover .el-checkbox__inner) {
+  border-color: var(--el-color-primary);
+}
+
+.selection-checkbox :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+  background-color: var(--el-color-primary);
+  border-color: var(--el-color-primary);
+}
+
+.selection-checkbox :deep(.el-checkbox__input.is-checked .el-checkbox__inner::after) {
+  border-color: #fff;
+}
+
+/* 暗色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .selection-checkbox :deep(.el-checkbox__inner) {
+    background-color: var(--el-fill-color-dark);
+    border-color: var(--el-border-color-dark);
+  }
+}
+
+.dark .selection-checkbox :deep(.el-checkbox__inner) {
+  background-color: var(--el-fill-color-dark);
+  border-color: var(--el-border-color-dark);
+}
+
+.dark .selection-checkbox :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+  background-color: var(--el-color-primary);
+  border-color: var(--el-color-primary);
 }
 
 .work-image {

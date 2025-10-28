@@ -1,6 +1,7 @@
 package com.cn.comfyui.controller;
 
 import com.cn.common.msg.Result;
+import com.cn.comfyui.dto.BatchDeleteWorkflowResultDto;
 import com.cn.comfyui.dto.WorkflowResultDto;
 import com.cn.comfyui.excepitons.ComfyuiException;
 import com.cn.comfyui.service.WorkflowResultService;
@@ -64,6 +65,23 @@ public class WorkflowResultController {
         try {
             workflowResultService.deleteWorkflowResult(dto);
             return Result.ok("删除成功");
+        } catch (ComfyuiException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 批量删除作品
+     *
+     * @param dto 批量删除作品请求
+     * @return 操作结果
+     */
+    @PostMapping(value = "/batch-delete/workflow-result", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RateLimit(permitsPerSecond = 0.3, limitType = RateLimit.LimitType.USER, message = "批量删除操作过于频繁，请稍后再试")
+    public Result batchDeleteWorkflowResult(@RequestBody @Valid final BatchDeleteWorkflowResultDto dto) {
+        try {
+            workflowResultService.batchDeleteWorkflowResult(dto);
+            return Result.ok("批量删除成功");
         } catch (ComfyuiException e) {
             return Result.error(e.getMessage());
         }

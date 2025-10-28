@@ -1,4 +1,4 @@
-import type { GetWorkflowResultPageApi, GetWorkflowDetailDetailApi, DeleteWorkflowResultApi } from './types'
+import type { GetWorkflowResultPageApi, GetWorkflowDetailDetailApi, DeleteWorkflowResultApi, BatchDeleteWorkflowResultApi } from './types'
 import { get, post } from '@/utils/requestUtil'
 
 export const WorkflowResultModelApi = {
@@ -27,5 +27,14 @@ export const WorkflowResultModelApi = {
    */
   reqDeleteWorkflowResult: (params: DeleteWorkflowResultApi.Params) => {
       return post<DeleteWorkflowResultApi.Result>('/comfyui/result/delete/workflow-result', params)
+    },
+
+  /**
+   * 批量删除作品
+   * @param params 请求参数
+   * @returns 删除结果
+   */
+  reqBatchDeleteWorkflowResult: (params: BatchDeleteWorkflowResultApi.Params) => {
+      return post<BatchDeleteWorkflowResultApi.Result>('/comfyui/result/batch-delete/workflow-result', params)
     }
 } 

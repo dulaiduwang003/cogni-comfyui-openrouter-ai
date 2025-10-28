@@ -155,3 +155,116 @@ html[class^="theme-dark"] *::-webkit-scrollbar-thumb:hover,
 html[class*=" theme-dark"] *::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4) !important;
 }
+
+/* Element Plus 暗色主题适配 */
+/* 默认按钮 - 暗色模式 */
+html[class^="theme-dark"] .el-button,
+html[class*=" theme-dark"] .el-button,
+html.dark .el-button,
+.dark .el-button {
+  background-color: var(--el-fill-color-light) !important;
+  border-color: var(--el-border-color) !important;
+  color: var(--el-text-color-primary) !important;
+}
+
+html[class^="theme-dark"] .el-button:hover,
+html[class*=" theme-dark"] .el-button:hover,
+html.dark .el-button:hover,
+.dark .el-button:hover {
+  background-color: var(--el-fill-color) !important;
+  border-color: var(--el-border-color-light) !important;
+  color: var(--el-text-color-primary) !important;
+}
+
+/* Primary 按钮在暗色模式下保持主题色 */
+html[class^="theme-dark"] .el-button--primary,
+html[class*=" theme-dark"] .el-button--primary,
+html.dark .el-button--primary,
+.dark .el-button--primary {
+  background-color: var(--el-color-primary) !important;
+  border-color: var(--el-color-primary) !important;
+  color: #ffffff !important;
+}
+
+html[class^="theme-dark"] .el-button--primary:hover,
+html[class*=" theme-dark"] .el-button--primary:hover,
+html.dark .el-button--primary:hover,
+.dark .el-button--primary:hover {
+  background-color: var(--el-color-primary-light-3) !important;
+  border-color: var(--el-color-primary-light-3) !important;
+}
+
+/* Danger 按钮在暗色模式下保持危险色 */
+html[class^="theme-dark"] .el-button--danger,
+html[class*=" theme-dark"] .el-button--danger,
+html.dark .el-button--danger,
+.dark .el-button--danger {
+  background-color: var(--el-color-danger) !important;
+  border-color: var(--el-color-danger) !important;
+  color: #ffffff !important;
+}
+
+html[class^="theme-dark"] .el-button--danger:hover,
+html[class*=" theme-dark"] .el-button--danger:hover,
+html.dark .el-button--danger:hover,
+.dark .el-button--danger:hover {
+  background-color: var(--el-color-danger-light-3) !important;
+  border-color: var(--el-color-danger-light-3) !important;
+}
+
+/* MessageBox 对话框暗色模式 */
+html[class^="theme-dark"] .el-message-box,
+html[class*=" theme-dark"] .el-message-box,
+html.dark .el-message-box,
+.dark .el-message-box {
+  background-color: var(--el-bg-color-overlay) !important;
+  border-color: var(--el-border-color) !important;
+}
+
+html[class^="theme-dark"] .el-message-box__header,
+html[class*=" theme-dark"] .el-message-box__header,
+html.dark .el-message-box__header,
+.dark .el-message-box__header {
+  background-color: var(--el-bg-color-overlay) !important;
+  border-bottom-color: var(--el-border-color) !important;
+}
+
+html[class^="theme-dark"] .el-message-box__title,
+html[class*=" theme-dark"] .el-message-box__title,
+html.dark .el-message-box__title,
+.dark .el-message-box__title {
+  color: var(--el-text-color-primary) !important;
+}
+
+html[class^="theme-dark"] .el-message-box__content,
+html[class*=" theme-dark"] .el-message-box__content,
+html.dark .el-message-box__content,
+.dark .el-message-box__content {
+  color: var(--el-text-color-regular) !important;
+}
+
+/* MessageBox 取消按钮（默认按钮） */
+html[class^="theme-dark"] .el-message-box__btns .el-button--default,
+html[class*=" theme-dark"] .el-message-box__btns .el-button--default,
+html.dark .el-message-box__btns .el-button--default,
+.dark .el-message-box__btns .el-button--default,
+html[class^="theme-dark"] .el-message-box__btns .el-button:not([class*="--"]),
+html[class*=" theme-dark"] .el-message-box__btns .el-button:not([class*="--"]),
+html.dark .el-message-box__btns .el-button:not([class*="--"]),
+.dark .el-message-box__btns .el-button:not([class*="--"]) {
+  background-color: var(--el-fill-color-light) !important;
+  border-color: var(--el-border-color) !important;
+  color: var(--el-text-color-primary) !important;
+}
+
+html[class^="theme-dark"] .el-message-box__btns .el-button--default:hover,
+html[class*=" theme-dark"] .el-message-box__btns .el-button--default:hover,
+html.dark .el-message-box__btns .el-button--default:hover,
+.dark .el-message-box__btns .el-button--default:hover,
+html[class^="theme-dark"] .el-message-box__btns .el-button:not([class*="--"]):hover,
+html[class*=" theme-dark"] .el-message-box__btns .el-button:not([class*="--"]):hover,
+html.dark .el-message-box__btns .el-button:not([class*="--"]):hover,
+.dark .el-message-box__btns .el-button:not([class*="--"]):hover {
+  background-color: var(--el-fill-color) !important;
+  border-color: var(--el-border-color-light) !important;
+}

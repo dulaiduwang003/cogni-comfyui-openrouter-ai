@@ -46,4 +46,13 @@ export namespace DeleteWorkflowResultApi {
   }
   
   export type Result = void
+}
+
+// 批量删除作品 API
+export namespace BatchDeleteWorkflowResultApi {
+  export interface Params {
+    workflowResultIds: number[] // 作品ID列表
+  }
+  
+  export type Result = void
 } 

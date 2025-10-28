@@ -3,6 +3,7 @@ package com.cn.comfyui.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cn.comfyui.dto.BatchDeleteWorkflowResultDto;
 import com.cn.comfyui.dto.WorkflowResultDto;
 import com.cn.comfyui.excepitons.ComfyuiException;
 import com.cn.comfyui.service.WorkflowResultService;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 作品服务实现类
@@ -110,6 +113,34 @@ public class WorkflowResultServiceImpl implements WorkflowResultService {
                 .setTotal(worksPage.getTotal());
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchDeleteWorkflowResult(final BatchDeleteWorkflowResultDto dto) {
+        List<Long> workflowResultIds = dto.getWorkflowResultIds();
+        Long currentUserId = UserUtils.getCurrentLoginId();
+
+        if (workflowResultIds == null || workflowResultIds.isEmpty()) {
+            throw new ComfyuiException("作品ID列表不能为空");
+        }
+
+        // 验证所有作品是否属于当前用户
+        long count = worksMapper.selectCount(
+                new LambdaQueryWrapper<WorkflowResult>()
+                        .in(WorkflowResult::getId, workflowResultIds)
+                        .eq(WorkflowResult::getUserId, currentUserId));
+
+        if (count != workflowResultIds.size()) {
+            throw new ComfyuiException("部分作品不存在或无权限删除");
+        }
+
+        // 批量删除作品
+        worksMapper.delete(
+                new LambdaQueryWrapper<WorkflowResult>()
+                        .in(WorkflowResult::getId, workflowResultIds)
+                        .eq(WorkflowResult::getUserId, currentUserId));
+
+        log.info("用户 {} 批量删除了 {} 个作品", currentUserId, workflowResultIds.size());
+    }
 
 
 }
